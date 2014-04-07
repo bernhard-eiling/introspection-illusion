@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>05B2346D-E389-4974-9BD6-FFAAE05C5B83</string>
+	<key>IDESourceControlProjectName</key>
+	<string>introspection-illusion</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4EC085F3-F9DC-4A34-B9F8-07B5A467E8BB</key>
+		<string>https://github.com/bernhard-eiling/introspection-illusion.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>introspection-illusion.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4EC085F3-F9DC-4A34-B9F8-07B5A467E8BB</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/bernhard-eiling/introspection-illusion.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4EC085F3-F9DC-4A34-B9F8-07B5A467E8BB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4EC085F3-F9DC-4A34-B9F8-07B5A467E8BB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>introspection-illusion</string>
+		</dict>
+	</array>
+</dict>
+</plist>
