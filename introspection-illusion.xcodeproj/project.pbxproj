@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		29E44B66ACF1D336223C6D5F /* demoParticle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACEEE5DC9831FFBD95787112 /* demoParticle.cpp */; };
+		29E44B66ACF1D336223C6D5F /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACEEE5DC9831FFBD95787112 /* Particle.cpp */; };
 		6F93BD3218EB5D5000A043DA /* libOpenNI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F93BD2D18EB5D5000A043DA /* libOpenNI.dylib */; };
 		6F93BD3718EB5E9C00A043DA /* org.openni.jar in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6F93BD3418EB5D7000A043DA /* org.openni.jar */; };
 		6F93BD3818EB5E9C00A043DA /* libnimCodecs.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6F93BD2A18EB5D5000A043DA /* libnimCodecs.dylib */; };
@@ -17,6 +17,8 @@
 		6F93BD3C18EB5E9C00A043DA /* libOpenNI.jni.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6F93BD2E18EB5D5000A043DA /* libOpenNI.jni.dylib */; };
 		6F93BDD418F07C0E00A043DA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F93BDD318F07C0E00A043DA /* main.cpp */; };
 		6FF43D1A18F73ECD0039A5C5 /* Boid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF43D1818F73ECD0039A5C5 /* Boid.cpp */; };
+		6FF43D2718F85DBB0039A5C5 /* BoidMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF43D2518F85DBB0039A5C5 /* BoidMachine.cpp */; };
+		6FF43D2A18F86F9D0039A5C5 /* ForceField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF43D2818F86F9D0039A5C5 /* ForceField.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -159,10 +161,14 @@
 		6F93BDD318F07C0E00A043DA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		6FF43D1818F73ECD0039A5C5 /* Boid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Boid.cpp; sourceTree = "<group>"; };
 		6FF43D1918F73ECD0039A5C5 /* Boid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Boid.h; sourceTree = "<group>"; };
-		6FF43D1E18F767D00039A5C5 /* introspection-illusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "introspection-illusion.app"; path = "/Users/Bernhard/git/of_v0.8.1_osx_release/apps/myApps/introspection-illusion/bin/introspection-illusion.app"; sourceTree = "<absolute>"; };
-		ACEEE5DC9831FFBD95787112 /* demoParticle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = demoParticle.cpp; path = src/demoParticle.cpp; sourceTree = SOURCE_ROOT; };
+		6FF43D2518F85DBB0039A5C5 /* BoidMachine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoidMachine.cpp; sourceTree = "<group>"; };
+		6FF43D2618F85DBB0039A5C5 /* BoidMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoidMachine.h; sourceTree = "<group>"; };
+		6FF43D2818F86F9D0039A5C5 /* ForceField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ForceField.cpp; sourceTree = "<group>"; };
+		6FF43D2918F86F9D0039A5C5 /* ForceField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForceField.h; sourceTree = "<group>"; };
+		6FF43D2C18F890B90039A5C5 /* introspection-illusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "introspection-illusion.app"; path = "/Users/Bernhard/git/of_v0.8.1_osx_release/apps/myApps/introspection-illusion/bin/introspection-illusion.app"; sourceTree = "<absolute>"; };
+		ACEEE5DC9831FFBD95787112 /* Particle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Particle.cpp; path = src/Particle.cpp; sourceTree = SOURCE_ROOT; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
-		D7B8F35BD0F7FE14E1597FA9 /* demoParticle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = demoParticle.h; path = src/demoParticle.h; sourceTree = SOURCE_ROOT; };
+		D7B8F35BD0F7FE14E1597FA9 /* Particle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Particle.h; path = src/Particle.h; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -373,10 +379,14 @@
 				6F93BDD318F07C0E00A043DA /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				D7B8F35BD0F7FE14E1597FA9 /* demoParticle.h */,
-				ACEEE5DC9831FFBD95787112 /* demoParticle.cpp */,
+				D7B8F35BD0F7FE14E1597FA9 /* Particle.h */,
+				ACEEE5DC9831FFBD95787112 /* Particle.cpp */,
 				6FF43D1818F73ECD0039A5C5 /* Boid.cpp */,
 				6FF43D1918F73ECD0039A5C5 /* Boid.h */,
+				6FF43D2518F85DBB0039A5C5 /* BoidMachine.cpp */,
+				6FF43D2618F85DBB0039A5C5 /* BoidMachine.h */,
+				6FF43D2818F86F9D0039A5C5 /* ForceField.cpp */,
+				6FF43D2918F86F9D0039A5C5 /* ForceField.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -410,7 +420,7 @@
 			);
 			name = "introspection-illusion";
 			productName = myOFApp;
-			productReference = 6FF43D1E18F767D00039A5C5 /* introspection-illusion.app */;
+			productReference = 6FF43D2C18F890B90039A5C5 /* introspection-illusion.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -480,7 +490,9 @@
 			files = (
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				6F93BDD418F07C0E00A043DA /* main.cpp in Sources */,
-				29E44B66ACF1D336223C6D5F /* demoParticle.cpp in Sources */,
+				6FF43D2A18F86F9D0039A5C5 /* ForceField.cpp in Sources */,
+				6FF43D2718F85DBB0039A5C5 /* BoidMachine.cpp in Sources */,
+				29E44B66ACF1D336223C6D5F /* Particle.cpp in Sources */,
 				6FF43D1A18F73ECD0039A5C5 /* Boid.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

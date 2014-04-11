@@ -6,8 +6,8 @@
 #include <XnPropNames.h>
 
 #include "ofMain.h"
-#include "demoParticle.h"
-#include "Boid.h"
+#include "Particle.h"
+#include "BoidMachine.h"
 
 class ofApp : public ofBaseApp{
 
@@ -16,6 +16,8 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
 		void resetParticles();
+        void setupKinect();
+        void updateKinect();
 
 		void keyPressed  (int key);
 		void keyReleased(int key);
@@ -32,7 +34,7 @@ class ofApp : public ofBaseApp{
 
 		vector<ofPoint> attractPoints;
 		vector<ofPoint> attractPointsWithMovement;
-        vector<Boid> boids;
+        BoidMachine boidMachine;
     
         /////////////////
         // KINECT

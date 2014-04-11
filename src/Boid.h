@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include "ofMain.h"
+#include "ForceField.h"
 
 #endif /* defined(__introspection_illusion__Boid__) */
 
@@ -21,11 +22,12 @@ class Boid {
 public:
     
     Boid();
-    
-    void reset();
+
     void update();
     void draw();
     
+    void setForceField(ForceField *forceField);
+    void setIndex(int i);
     void setNeighbours(vector<Boid> *boids);
     float getLenght(ofVec2f vec);
     
@@ -35,14 +37,20 @@ public:
     
 private:
     ofVec2f flock();
-    ofVec2f separation();
-    ofVec2f alignment();
-    ofVec2f cohesion();
     ofVec2f steerTo(ofVec2f target);
+    void stayOnScreen();
+    void bounceScreen();
     
-    int neighbourRadius;
-    int seperationRadius;
-    int maxSpeed;
+    float speed;
+    float neighbourRadius;
+    float seperationRadius;
+    float maxSpeed;
     float maxForce;
     float scale;
+    
+    float sepWeight;
+    float aliWeight;
+    float cohWeight;
+    
+    int index;
 };
