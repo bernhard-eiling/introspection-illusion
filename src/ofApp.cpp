@@ -24,6 +24,8 @@
 xn::Context g_Context;
 xn::ScriptNode g_scriptNode;
 xn::UserGenerator g_UserGenerator;
+xn::DepthGenerator g_DepthGenerator;
+xn::DepthMetaData g_depthMD;
 
 XnBool g_bNeedPose = FALSE;
 XnChar g_strPose[20] = "";
@@ -33,6 +35,11 @@ XnChar g_strPose[20] = "";
 XnUserID aUsers[MAX_NUM_USERS];
 XnUInt16 nUsers;
 XnSkeletonJointTransformation torsoJoint;
+
+vector<ofPoint> forceFieldsPoint;
+vector<demoParticle> p;
+float xFactor = 1024.0 / 640.0;
+float yFactor = 768.0 / 480.0;
 
 //---------------------------------------------------------------------------
 // Code
@@ -70,6 +77,13 @@ void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& /*generator*/, XnUserID n
     XnUInt32 epochTime = 0;
     xnOSGetEpochTime(&epochTime);
     printf("%d Lost user %d\n", epochTime, nId);
+
+    // REMOVE FORCE FIELD VECTOR ON ALL PARTICLES
+    for(unsigned int i = 0; i < p.size(); i++){
+        forceFieldsPoint[nId] = ofPoint(-10000.0, -10000.0);
+        //p[i].reset();
+    }
+    //printf("forceFieldMap size: %lu\n", forceFieldsMap.size());
 }
 // Callback: Detected a pose
 void XN_CALLBACK_TYPE UserPose_PoseDetected(xn::PoseDetectionCapability& /*capability*/, const XnChar* strPose, XnUserID nId, void* /*pCookie*/)
@@ -94,9 +108,11 @@ void XN_CALLBACK_TYPE UserCalibration_CalibrationComplete(xn::SkeletonCapability
     xnOSGetEpochTime(&epochTime);
     if (eStatus == XN_CALIBRATION_STATUS_OK)
     {
+        
         // Calibration succeeded
         printf("%d Calibration complete, start tracking user %d\n", epochTime, nId);
         g_UserGenerator.GetSkeletonCap().StartTracking(nId);
+
     }
     else
     {
@@ -135,11 +151,12 @@ return nRetVal;						    \
 void ofApp::setup(){
 	ofSetVerticalSync(true);
 	
-	int num = 1500;
+	int num = 40000;
 	p.assign(num, demoParticle());
-	currentMode = PARTICLE_MODE_ATTRACT;
+    boids.assign(1000, Boid());
+	currentMode = PARTICLE_MODE_KINECT;
 
-	currentModeStr = "1 - PARTICLE_MODE_ATTRACT: attracts to mouse"; 
+	currentModeStr = "KINECT ACTION";
 
 	resetParticles();
     
@@ -179,6 +196,14 @@ void ofApp::setup(){
         nRetVal = g_UserGenerator.Create(g_Context);
         CHECK_RC(nRetVal, "Find user generator");
     }
+    
+    nRetVal = g_Context.FindExistingNode(XN_NODE_TYPE_DEPTH, g_DepthGenerator);
+    if (nRetVal != XN_STATUS_OK)
+	{
+		printf("No depth node exists! Check your XML.");
+		return 1;
+	}
+    g_DepthGenerator.GetMetaData(g_depthMD);
     
     XnCallbackHandle hUserCallbacks, hCalibrationStart, hCalibrationComplete, hPoseDetected;
     if (!g_UserGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON))
@@ -233,12 +258,17 @@ void ofApp::resetParticles(){
 	for(int i = 0; i < 4; i++){
 		attractPoints.push_back( ofPoint( ofMap(i, 0, 4, 100, ofGetWidth()-100) , ofRandom(100, ofGetHeight()-100) ) );
 	}
+    
+    forceFieldsPoint.clear();
+	for(int i = 0; i <= MAX_NUM_USERS; i++){
+		forceFieldsPoint.push_back( ofPoint( -10000.0, -10000.0 ) );
+	}
 	
 	attractPointsWithMovement = attractPoints;
 	
 	for(unsigned int i = 0; i < p.size(); i++){
-		p[i].setMode(currentMode);		
-		p[i].setAttractPoints(&attractPointsWithMovement);;
+		p[i].setAttractPoints(&attractPointsWithMovement);
+        p[i].setForceFieldsPoint(&forceFieldsPoint);
 		p[i].reset();
 	}	
 }
@@ -246,61 +276,44 @@ void ofApp::resetParticles(){
 //--------------------------------------------------------------
 void ofApp::update(){
 	for(unsigned int i = 0; i < p.size(); i++){
-		p[i].setMode(currentMode);
 		p[i].update();
 	}
-	
-	//lets add a bit of movement to the attract points
-	for(unsigned int i = 0; i < attractPointsWithMovement.size(); i++){
-		attractPointsWithMovement[i].x = attractPoints[i].x + ofSignedNoise(i * 10, ofGetElapsedTimef() * 0.7) * 12.0;
-		attractPointsWithMovement[i].y = attractPoints[i].y + ofSignedNoise(i * -10, ofGetElapsedTimef() * 0.7) * 12.0;
+    for(unsigned int i = 0; i < boids.size(); i++){
+		boids[i].update();
 	}
-    
-    ////////////////
-    // KINECT
-    
-   
-        g_Context.WaitOneUpdateAll(g_UserGenerator);
-        // print the torso information for the first user already tracking
-        nUsers=MAX_NUM_USERS;
-        g_UserGenerator.GetUsers(aUsers, nUsers);
-        for(XnUInt16 i=0; i<nUsers; i++)
-        {
-            if(g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i])==FALSE)
-                continue;
-            
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_TORSO,torsoJoint);
-            printf("user %d: head at (%6.2f,%6.2f,%6.2f)\n",aUsers[i],
-                   torsoJoint.position.position.X,
-                   torsoJoint.position.position.Y,
-                   torsoJoint.position.position.Z);
-            xPos = torsoJoint.position.position.X;
-            yPos = torsoJoint.position.position.Y;
-        }
-        
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackgroundGradient(ofColor(60,60,60), ofColor(10,10,10));
+    ofBackground(0,0,0);
 
-	for(unsigned int i = 0; i < p.size(); i++){
-        p[i].setPos(xPos, yPos);
-		p[i].draw();
-	}
-	
-	ofSetColor(190);
-	if( currentMode == PARTICLE_MODE_NEAREST_POINTS ){
-		for(unsigned int i = 0; i < attractPoints.size(); i++){
-			ofNoFill();
-			ofCircle(attractPointsWithMovement[i], 10);
-			ofFill();
-			ofCircle(attractPointsWithMovement[i], 4);
-		}
-	}
-
-	ofSetColor(230);	
-	ofDrawBitmapString(currentModeStr + "\n\nSpacebar to reset. \nKeys 1-4 to change mode.", 10, 20);
+	ofSetColor(230);
+    string fpsStr = "FPS: " + ofToString(ofGetFrameRate(), 3);
+    ofDrawBitmapString(fpsStr, 10,20);
+    
+    ////////////////
+    // KINECT
+    g_Context.WaitOneUpdateAll(g_UserGenerator);
+    // print the torso information for the first user already tracking
+    nUsers=MAX_NUM_USERS;
+    g_UserGenerator.GetUsers(aUsers, nUsers);
+    for(XnUInt16 i=0; i<nUsers; i++) {
+        if(g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i])) {
+            
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_HEAD,torsoJoint);
+            
+            XnSkeletonJointPosition bodyPos;
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_HEAD, bodyPos);
+            
+            XnPoint3D pt;
+            pt = bodyPos.position;
+            
+            g_DepthGenerator.ConvertRealWorldToProjective(1, &pt, &pt);
+            
+            // UPDATE FORCE FIELD
+            forceFieldsPoint[aUsers[i]] = ofPoint(pt.X * xFactor, pt.Y * yFactor);
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -321,7 +334,12 @@ void ofApp::keyPressed(int key){
 		currentMode = PARTICLE_MODE_NOISE;
 		currentModeStr = "4 - PARTICLE_MODE_NOISE: snow particle simulation"; 						
 		resetParticles();
-	}	
+	}
+    if( key == '5'){
+		currentMode = PARTICLE_MODE_KINECT;
+		currentModeStr = "KINECT ACTION";
+		resetParticles();
+	}
 		
 	if( key == ' ' ){
 		resetParticles();

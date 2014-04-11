@@ -16,6 +16,7 @@
 		6F93BD3B18EB5E9C00A043DA /* libOpenNI.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6F93BD2D18EB5D5000A043DA /* libOpenNI.dylib */; };
 		6F93BD3C18EB5E9C00A043DA /* libOpenNI.jni.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6F93BD2E18EB5D5000A043DA /* libOpenNI.jni.dylib */; };
 		6F93BDD418F07C0E00A043DA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F93BDD318F07C0E00A043DA /* main.cpp */; };
+		6FF43D1A18F73ECD0039A5C5 /* Boid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FF43D1818F73ECD0039A5C5 /* Boid.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -156,6 +157,9 @@
 		6F93BD7F18EB5EF000A043DA /* XnUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XnUtils.h; path = "../../../../../kinect/OpenNI-Bin-Dev-MacOSX-v1.5.7.10/Include/XnUtils.h"; sourceTree = "<group>"; };
 		6F93BD8018EB5EF000A043DA /* XnVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XnVersion.h; path = "../../../../../kinect/OpenNI-Bin-Dev-MacOSX-v1.5.7.10/Include/XnVersion.h"; sourceTree = "<group>"; };
 		6F93BDD318F07C0E00A043DA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		6FF43D1818F73ECD0039A5C5 /* Boid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Boid.cpp; sourceTree = "<group>"; };
+		6FF43D1918F73ECD0039A5C5 /* Boid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Boid.h; sourceTree = "<group>"; };
+		6FF43D1E18F767D00039A5C5 /* introspection-illusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "introspection-illusion.app"; path = "/Users/Bernhard/git/of_v0.8.1_osx_release/apps/myApps/introspection-illusion/bin/introspection-illusion.app"; sourceTree = "<absolute>"; };
 		ACEEE5DC9831FFBD95787112 /* demoParticle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = demoParticle.cpp; path = src/demoParticle.cpp; sourceTree = SOURCE_ROOT; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		D7B8F35BD0F7FE14E1597FA9 /* demoParticle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = demoParticle.h; path = src/demoParticle.h; sourceTree = SOURCE_ROOT; };
@@ -168,7 +172,6 @@
 		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
-		E4B69B5B0A3A1756003C02F2 /* introspection-illusionDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "introspection-illusionDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
 		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
@@ -361,7 +364,6 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				E4B69B5B0A3A1756003C02F2 /* introspection-illusionDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -373,6 +375,8 @@
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 				D7B8F35BD0F7FE14E1597FA9 /* demoParticle.h */,
 				ACEEE5DC9831FFBD95787112 /* demoParticle.cpp */,
+				6FF43D1818F73ECD0039A5C5 /* Boid.cpp */,
+				6FF43D1918F73ECD0039A5C5 /* Boid.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -406,7 +410,7 @@
 			);
 			name = "introspection-illusion";
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* introspection-illusionDebug.app */;
+			productReference = 6FF43D1E18F767D00039A5C5 /* introspection-illusion.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -477,6 +481,7 @@
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				6F93BDD418F07C0E00A043DA /* main.cpp in Sources */,
 				29E44B66ACF1D336223C6D5F /* demoParticle.cpp in Sources */,
+				6FF43D1A18F73ECD0039A5C5 /* Boid.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

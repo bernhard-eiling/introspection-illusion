@@ -7,6 +7,7 @@
 
 #include "ofMain.h"
 #include "demoParticle.h"
+#include "Boid.h"
 
 class ofApp : public ofBaseApp{
 
@@ -29,8 +30,22 @@ class ofApp : public ofBaseApp{
 		particleMode currentMode;
 		string currentModeStr;
 
-		vector <demoParticle> p;
-		vector <ofPoint> attractPoints;
-		vector <ofPoint> attractPointsWithMovement;
+		vector<ofPoint> attractPoints;
+		vector<ofPoint> attractPointsWithMovement;
+        vector<Boid> boids;
     
+        /////////////////
+        // KINECT
+    /*
+    xn::Context g_Context;
+    xn::ScriptNode g_scriptNode;
+    xn::UserGenerator g_UserGenerator;
+
+    
+    ~ofApp() {
+        g_scriptNode.Release();
+        g_UserGenerator.Release();
+        g_Context.Release();
+    }
+    */
 };

@@ -1,20 +1,21 @@
 #include "demoParticle.h"
+#include <XnCppWrapper.h>
 
 //------------------------------------------------------------------
 demoParticle::demoParticle(){
 	attractPoints = NULL;
-    xPos = 0.0;
-    yPos = 0.0;
-}
-
-//------------------------------------------------------------------
-void demoParticle::setMode(particleMode newMode){
-	mode = newMode;
+    forceFieldsPoint = NULL;
 }
 
 //------------------------------------------------------------------
 void demoParticle::setAttractPoints( vector <ofPoint> * attract ){
 	attractPoints = attract;
+}
+
+
+//------------------------------------------------------------------
+void demoParticle::setForceFieldsPoint(vector<ofPoint> *fieldPoint) {
+    forceFieldsPoint = fieldPoint;
 }
 
 //------------------------------------------------------------------
@@ -25,8 +26,8 @@ void demoParticle::reset(){
 	pos.x = ofRandomWidth();
 	pos.y = ofRandomHeight();
 	
-	vel.x = ofRandom(-3.9, 3.9);
-	vel.y = ofRandom(-3.9, 3.9);
+	vel.x = ofRandom(-1.0, 1.0);
+	vel.y = ofRandom(-1.0, 1.0);
 	
 	frc   = ofPoint(0,0,0);
 	
@@ -43,95 +44,30 @@ void demoParticle::reset(){
 //------------------------------------------------------------------
 void demoParticle::update(){
 
-	//1 - APPLY THE FORCES BASED ON WHICH MODE WE ARE IN 
-	
-	if( mode == PARTICLE_MODE_ATTRACT ){
-		//ofPoint attractPt(ofGetMouseX(), ofGetMouseY());
-        ofPoint attractPt(xPos, yPos);
-		frc = attractPt-pos; // we get the attraction force/vector by looking at the mouse pos relative to our pos
-		frc.normalize(); //by normalizing we disregard how close the particle is to the attraction point 
-		
-		vel *= drag; //apply drag
-		vel += frc * 0.6; //apply force
-	}
-	else if( mode == PARTICLE_MODE_REPEL ){
-		ofPoint attractPt(ofGetMouseX(), ofGetMouseY());
-        //ofPoint attractPt(xPos, yPos);
-		frc = attractPt-pos; 
-		
-		//let get the distance and only repel points close to the mouse
-		float dist = frc.length();
-		frc.normalize(); 
-		
-		vel *= drag; 
-		if( dist < 150 ){
-			vel += -frc * 0.6; //notice the frc is negative 
-		}else{
-			//if the particles are not close to us, lets add a little bit of random movement using noise. this is where uniqueVal comes in handy. 			
-			frc.x = ofSignedNoise(uniqueVal, pos.y * 0.01, ofGetElapsedTimef()*0.2);
-			frc.y = ofSignedNoise(uniqueVal, pos.x * 0.01, ofGetElapsedTimef()*0.2);
-			vel += frc * 0.04;
-		}
-	}
-	else if( mode == PARTICLE_MODE_NOISE ){
-		//lets simulate falling snow 
-		//the fake wind is meant to add a shift to the particles based on where in x they are
-		//we add pos.y as an arg so to prevent obvious vertical banding around x values - try removing the pos.y * 0.006 to see the banding
-		float fakeWindX = ofSignedNoise(pos.x * 0.003, pos.y * 0.006, ofGetElapsedTimef() * 0.6);
-		
-		frc.x = fakeWindX * 0.25 + ofSignedNoise(uniqueVal, pos.y * 0.04) * 0.6;
-		frc.y = ofSignedNoise(uniqueVal, pos.x * 0.006, ofGetElapsedTimef()*0.2) * 0.09 + 0.18;
-
-		vel *= drag; 
-		vel += frc * 0.4;
-		
-		//we do this so as to skip the bounds check for the bottom and make the particles go back to the top of the screen
-		if( pos.y + vel.y > ofGetHeight() ){
-			pos.y -= ofGetHeight();
-		}
-	}
-	else if( mode == PARTICLE_MODE_NEAREST_POINTS ){
-		
-		if( attractPoints ){
-
-			//1 - find closest attractPoint 
-			ofPoint closestPt;
-			int closest = -1; 
-			float closestDist = 9999999;
-			
-			for(unsigned int i = 0; i < attractPoints->size(); i++){
-				float lenSq = ( attractPoints->at(i)-pos ).lengthSquared();
-				if( lenSq < closestDist ){
-					closestDist = lenSq;
-					closest = i;
-				}
-			}
-			
-			//2 - if we have a closest point - lets calcuate the force towards it
-			if( closest != -1 ){
-				closestPt = attractPoints->at(closest);				
-				float dist = sqrt(closestDist);
-				
-				//in this case we don't normalize as we want to have the force proportional to distance 
-				frc = closestPt - pos;
-		
-				vel *= drag;
-				 
-				//lets also limit our attraction to a certain distance and don't apply if 'f' key is pressed
-				if( dist < 300 && dist > 40 && !ofGetKeyPressed('f') ){
-					vel += frc * 0.003;
-				}else{
-					//if the particles are not close to us, lets add a little bit of random movement using noise. this is where uniqueVal comes in handy. 			
-					frc.x = ofSignedNoise(uniqueVal, pos.y * 0.01, ofGetElapsedTimef()*0.2);
-					frc.y = ofSignedNoise(uniqueVal, pos.x * 0.01, ofGetElapsedTimef()*0.2);
-					vel += frc * 0.4;
-				}
-				
-			}
-		
-		}
-		
-	}
+        if( forceFieldsPoint ){
+            ofPoint sumFrc = ofPoint(0,0);
+            for(unsigned int i = 0; i < forceFieldsPoint->size(); i++){
+                ofPoint currentAttr = forceFieldsPoint->at(i) - pos;
+                float dist = currentAttr.lengthSquared();
+                if (dist < 12000) {
+                    
+                    float dist1 = currentAttr.lengthSquared();
+                    sumFrc += currentAttr;
+                }
+            }
+            frc = sumFrc;
+            vel += frc * 0.0050;
+            float len = vel.length();
+            
+            if (vel.length() > 1.5) {
+                vel.scale(1.4);
+            }
+/*
+            ofPoint currentAttr = forceFieldsPoint->at(1);
+            printf("\nUser: %i | x: %f | y: %f", 1, currentAttr.x, currentAttr.y);
+ */
+        
+        }
 	
 	
 	//2 - UPDATE OUR POSITION
@@ -174,13 +110,11 @@ void demoParticle::draw(){
 	else if( mode == PARTICLE_MODE_NEAREST_POINTS ){
 		ofSetColor(103, 160, 237);
 	}
+    else if( mode == PARTICLE_MODE_KINECT ){
+		ofSetColor(255, 255, 255);
+	}
 			
-	ofCircle(pos.x, pos.y, scale * 4.0);
+	ofCircle(pos.x, pos.y, scale * 1.5);
 }
 
-void demoParticle::setPos(double x, double y) {
-    
-    xPos = x;
-    yPos = y;
-}
 
