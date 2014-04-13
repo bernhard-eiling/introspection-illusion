@@ -17,8 +17,14 @@ XnChar g_strPose[20] = "";
 XnUserID aUsers[MAX_NUM_USERS];
 XnUInt16 nUsers;
 XnSkeletonJointTransformation torsoJoint;
+XnSkeletonJointTransformation leftHand;
+XnSkeletonJointTransformation rightHand;
 
 vector<ofPoint> forceFieldsPoint;
+
+//BoidMachine boidMachineFast(5.0, 10.0, 1.0, 0.3);
+BoidMachine boidMachineFast(3.0, 10.0, 3.0, 1.0);
+BoidMachine boidMachineSlow(1.0, 5.0, 0.5, 0.1);
 //vector<demoParticle> p;
 float xFactor = 1024.0 / 640.0;
 float yFactor = 768.0 / 480.0;
@@ -57,13 +63,8 @@ void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& /*generator*/, XnUserID n
     xnOSGetEpochTime(&epochTime);
     printf("%d Lost user %d\n", epochTime, nId);
 
-    // REMOVE FORCE FIELD VECTOR ON ALL PARTICLES
-    /*
-    for(unsigned int i = 0; i < p.size(); i++){
-        forceFieldsPoint[nId] = ofPoint(-10000.0, -10000.0);
-    }
-     */
-    //printf("forceFieldMap size: %lu\n", forceFieldsMap.size());
+    // REMOVE FORCEFIELD
+    //boidMachine.removeForceField(nId - 1);
 }
 // Callback: Detected a pose
 void XN_CALLBACK_TYPE UserPose_PoseDetected(xn::PoseDetectionCapability& /*capability*/, const XnChar* strPose, XnUserID nId, void* /*pCookie*/)
@@ -92,7 +93,9 @@ void XN_CALLBACK_TYPE UserCalibration_CalibrationComplete(xn::SkeletonCapability
         // Calibration succeeded
         printf("%d Calibration complete, start tracking user %d\n", epochTime, nId);
         g_UserGenerator.GetSkeletonCap().StartTracking(nId);
-
+        
+        // ADD FORCEFIELD
+        //boidMachine.addForceField(nId);
     }
     else
     {
@@ -141,14 +144,34 @@ void ofApp::setup(){
 
 	resetParticles();
     
-
+   
+    /*
+    ofSetLogLevel(OF_LOG_VERBOSE);
     
-//    boidMachine.forceFields[1] = ForceField();
-//    boidMachine.forceFields.erase(1);
-    boidMachine.setForceField(1, ofGetWidth()/ 2, ofGetHeight()/ 2);
+    ofDisableArbTex(); // we need GL_TEXTURE_2D for our models coords.
+    
+    bAnimate = false;
+    bAnimateMouse = false;
+    animationPosition = 0;
+    
+    //model.loadModel("particle_11.dae", true);
+    model.loadModel("particles.dae", true);
+    //model.loadModel("particle_anim.dae", true);
+    model.setPosition(ofGetWidth() * 0.5, (float)ofGetHeight() * 0.75 , 0);
+    model.setLoopStateForAllAnimations(OF_LOOP_NORMAL);
+    model.playAllAnimations();
+    if(!bAnimate) {
+        model.setPausedForAllAnimations(true);
+    }
+    model.setScale(0.1, 0.1, 0.1);
+    */
+    //model.loadModel("astroBoy.dae", true);
+    model.loadModel("particle_11.dae", true);
+    //model.loadModel("particles1.dae", true);
+    boidMachineFast.setModel(&model);
+    boidMachineSlow.setModel(&model);
 
-    int bal = 0;
-    //setupKinect();
+  //  setupKinect();
 }
 
 
@@ -181,13 +204,26 @@ void ofApp::resetParticles(){
 void ofApp::update(){
     
     //updateKinect();
-    boidMachine.update();
+    boidMachineFast.update();
+    boidMachineSlow.update();
     /*
 	for(unsigned int i = 0; i < p.size(); i++){
 		p[i].update();
 	}
      */
-
+    //boidMachine.setPosForceField(0, ofGetMouseX(), ofGetMouseY());
+    
+    ///////////////
+    // MESH
+    /*
+    model.update();
+    
+    if(bAnimateMouse) {
+        model.setPositionForAllAnimations(animationPosition);
+    }
+    */
+    //mesh = model.getCurrentAnimatedMesh(0);
+    
 }
 
 //--------------------------------------------------------------
@@ -199,7 +235,84 @@ void ofApp::draw(){
     string fpsStr = "FPS: " + ofToString(ofGetFrameRate(), 3);
     ofDrawBitmapString(fpsStr, 10,20);
 
-    boidMachine.draw();
+    boidMachineFast.draw();
+    boidMachineSlow.draw();
+    
+    ///////////////
+    // KINECT
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    
+	ofEnableDepthTest();
+    
+    ///////////////
+    // MESH
+    /*
+    model.drawFaces();
+    light.enable();
+    */
+    /*
+    ofSetColor(255);
+    
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    
+	ofEnableDepthTest();
+    
+    glShadeModel(GL_SMOOTH); //some model / light stuff
+    light.enable();
+    ofEnableSeparateSpecularLight();
+    
+    ofPushMatrix();
+    ofTranslate(model.getPosition().x+100, model.getPosition().y, 0);
+    ofRotate(-mouseX, 0, 1, 0);
+    ofTranslate(-model.getPosition().x, -model.getPosition().y, 0);
+    model.drawFaces();
+    ofPopMatrix();
+    
+    ofPushMatrix();
+    ofTranslate(model.getPosition().x+300, model.getPosition().y, 0);
+    ofRotate(-mouseX, 0, 1, 0);
+    ofTranslate(-model.getPosition().x, -model.getPosition().y, 0);
+    model.drawFaces();
+    ofPopMatrix();
+    
+    if(ofGetGLProgrammableRenderer()){
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+    }
+    glEnable(GL_NORMALIZE);
+    
+    ofPushMatrix();
+    ofTranslate(model.getPosition().x-300, model.getPosition().y, 0);
+    ofRotate(-mouseX, 0, 1, 0);
+    ofTranslate(-model.getPosition().x, -model.getPosition().y, 0);
+    
+    ofxAssimpMeshHelper & meshHelper = model.getMeshHelper(0);
+    
+    ofMultMatrix(model.getModelMatrix());
+    ofMultMatrix(meshHelper.matrix);
+    
+    ofMaterial & material = meshHelper.material;
+    if(meshHelper.hasTexture()){
+        meshHelper.getTexturePtr()->bind();
+    }
+    material.begin();
+    mesh.drawWireframe();
+    material.end();
+    if(meshHelper.hasTexture()){
+        meshHelper.getTexturePtr()->unbind();
+    }
+    ofPopMatrix();
+    
+    if(ofGetGLProgrammableRenderer()){
+    	glPopAttrib();
+    }
+    
+    ofDisableDepthTest();
+    light.disable();
+    ofDisableLighting();
+    ofDisableSeparateSpecularLight();
+     */
+    
 }
 
 //--------------------------------------------------------------
@@ -281,21 +394,30 @@ void ofApp::updateKinect() {
     for(XnUInt16 i=0; i<nUsers; i++) {
         if(g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i])) {
             
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_HEAD,torsoJoint);
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_TORSO,torsoJoint);
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_LEFT_HAND,leftHand);
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_RIGHT_HAND,rightHand);
             
-            XnSkeletonJointPosition bodyPos;
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_HEAD, bodyPos);
+            XnSkeletonJointPosition torsoPos;
+            XnSkeletonJointPosition leftHandPos;
+            XnSkeletonJointPosition rightHandPos;
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_TORSO, torsoPos);
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_LEFT_HAND, leftHandPos);
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_RIGHT_HAND, rightHandPos);
             
-            XnPoint3D pt;
-            pt = bodyPos.position;
+            XnPoint3D torsoPoint;
+            XnPoint3D leftHandPoint;
+            XnPoint3D righthandPoint;
+            torsoPoint = torsoPos.position;
+            leftHandPoint = leftHandPos.position;
+            righthandPoint = rightHandPos.position;
             
-            g_DepthGenerator.ConvertRealWorldToProjective(1, &pt, &pt);
+            g_DepthGenerator.ConvertRealWorldToProjective(1, &torsoPoint, &torsoPoint);
+            g_DepthGenerator.ConvertRealWorldToProjective(1, &leftHandPoint, &leftHandPoint);
+            g_DepthGenerator.ConvertRealWorldToProjective(1, &righthandPoint, &righthandPoint);
             
             // UPDATE FORCE FIELD
-            forceFieldsPoint[aUsers[i]] = ofPoint(pt.X * xFactor, pt.Y * yFactor);
-            
-            ofCircle(pt.X * xFactor, pt.Y * yFactor, 12);
-            printf("\nUser: %i | x: %f | y: %f", aUsers[i], pt.X * xFactor, pt.Y * yFactor);
+            //boidMachine.setPosForceField(aUsers[i - 1], torsoPoint.X * xFactor, torsoPoint.Y * xFactor, leftHandPoint.X * xFactor, leftHandPoint.Y * xFactor, righthandPoint.X * xFactor, righthandPoint.Y * xFactor);
         }
     }
 }

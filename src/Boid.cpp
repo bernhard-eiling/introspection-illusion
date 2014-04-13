@@ -9,19 +9,26 @@
 #include "Boid.h"
 
 Boid::Boid() {
-    speed = 10.0;
+    speed = 1.0;
     neighbours = NULL;
+    forceFields = NULL;
     neighbourRadius = 3500; // radius 50
     seperationRadius = 250; // radius 10
+    gravitationRadius = 12000;
     maxSpeed = speed;
-    maxForce = 5.0;
-    sepWeight = 10.0;
-    aliWeight = 0.3;
-    cohWeight = 0.05;
+    maxForce = 0.5;
+    //sepWeight = 2.0;
+    sepWeight = ofRandom(1.0, 10.0);
+    //aliWeight = 0.3;
+    aliWeight = ofRandom(0.1, 4.0);
+    //cohWeight = 0.1;
+    cohWeight = ofRandom(0.05, 1.0);
+    graviWeight = -0.05;
     scale = 1.5;//ofRandom(0.5, 1.0);
     
-    pos.x = ofRandomWidth();
-	pos.y = ofRandomHeight();
+    pos.x = (float)(std::rand() % 1024);//500;//ofRandomWidth();
+	pos.y = (float)(std::rand() % 768);//ofRandomHeight();
+     
     /*
     pos.x = ofGetWidth() / 2;
 	pos.y = ofGetHeight() / 2;
@@ -29,22 +36,37 @@ Boid::Boid() {
     
     vel.x = ofRandom(-speed, speed);
 	vel.y = ofRandom(-speed, speed);
+    rotate = ofRandom(-100, 100);
 }
 
 void Boid::update() {
+    ofVec2f gravity = ofVec2f(0.0, 0.0);
+    if (forceFields != NULL) {
+        gravity = gravitate();
+    }
     ofVec2f acc = flock();
     vel = (vel + acc).limit(maxSpeed);
+    vel = (vel + gravity).limit(maxSpeed);
     pos += vel;
     // SCALE UP BOID BY VELOCITY
     //scale = vel.length();
     
-    //stayOnScreen();
-    bounceScreen();
+    stayOnScreen();
+    //bounceScreen();
+    rotate += 2.0;
 }
 
 void Boid::draw() {
+    /*
     ofSetColor(255, 255, 255);
     ofCircle(pos.x, pos.y, scale * 1.0);
+    */
+    // MODEL
+    ofPushMatrix();
+    ofTranslate(pos.x, pos.y, 0);
+    ofRotate(rotate, 0, 1, 1);
+    model->drawFaces();
+    ofPopMatrix();
 
     // PRINT NEIGHBOUR RADIUS
     /*
@@ -53,7 +75,27 @@ void Boid::draw() {
     ofSetColor(255, 255, 255);
     ofCircle(pos.x, pos.y, 50);
     }
-     */
+    */
+}
+
+ofVec2f Boid::gravitate() {
+    ofVec2f grav = ofVec2f(0.0, 0.0);
+    
+    for(int i = 0; i < forceFields->size(); i++){
+        if(forceFields->find(i) != forceFields->end()) {
+            ofVec2f deltaVec = forceFields->at(i).torsoPos - pos;
+            float deltaSqrt = deltaVec.lengthSquared();
+            if (deltaSqrt < forceFields->at(i).radius) {
+                grav += deltaVec;
+        
+            }
+            grav *= forceFields->at(i).fieldStrenght;
+        }
+    }
+    //grav *= graviWeight;
+    
+    
+    return grav;
 }
 
 ofVec2f Boid::flock() {
@@ -150,8 +192,26 @@ void Boid::setNeighbours(vector<Boid> *boids) {
     neighbours = boids;
 }
 
-void Boid::setForceField(<#ForceField *forceField#>) {
+void Boid::setForceFields(map<int, ForceField> *fields) {
+    forceFields = fields;
+}
+
+void Boid::setModel(ofxAssimpModelLoader *m) {
+    model = m;
+    //model->setScale(0.05, 0.05, 0.05);
+    float scale = ofRandom(0.02, 0.07);
+    model->setScale(scale, scale, scale);
+}
+
+void Boid::setWeights(float sp, float s, float a, float c) {
+    speed = sp;
+    sepWeight = s;
+    aliWeight = a;
+    cohWeight = c;
     
+    maxSpeed = speed;
+    vel.x = ofRandom(-speed, speed);
+	vel.y = ofRandom(-speed, speed);
 }
 
 void Boid::setIndex(int i) {

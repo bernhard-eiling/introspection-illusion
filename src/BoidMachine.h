@@ -15,22 +15,33 @@
 #include "ofMain.h"
 #include "Boid.h"
 #include "ForceField.h"
-
+#include "ofxAssimpModelLoader.h"
+#include "ofVboMesh.h"
+ 
 #endif /* defined(__introspection_illusion__BoidMachine__) */
 
 class BoidMachine {
     
 public:
     
-    BoidMachine();
+    BoidMachine(float speed, float sep, float ali, float coh);
     
     void update();
     void draw();
-    void setForceField(int index, int xPos, int yPos);
+    void addForceField(int index);
+    void removeForceField(int user);
+    void setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
+    void setModel(ofxAssimpModelLoader *m);
     
     int numBoids;
+    float speed;
+    float sep;
+    float ali;
+    float coh;
     
     vector<Boid> boids;
-
     map<int, ForceField> forceFields;
+    ofxAssimpModelLoader *model;
+    
+    ofLight	light;
 };

@@ -9,6 +9,10 @@
 #include "Particle.h"
 #include "BoidMachine.h"
 
+#include "ofxAssimpModelLoader.h"
+#include "ofVboMesh.h"
+ 
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -34,7 +38,18 @@ class ofApp : public ofBaseApp{
 
 		vector<ofPoint> attractPoints;
 		vector<ofPoint> attractPointsWithMovement;
-        BoidMachine boidMachine;
+    
+        /////////////////
+        // MESH
+    
+        ofxAssimpModelLoader model;
+    
+        ofMesh mesh;
+        ofLight	light;
+    
+        bool bAnimate;
+        bool bAnimateMouse;
+        float animationPosition;
     
         /////////////////
         // KINECT
