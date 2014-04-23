@@ -42,6 +42,11 @@ public:
     map<int, ForceField> *forceFields;
     ofxAssimpModelLoader *model;
     
+    float sepWeight;
+    float aliWeight;
+    float cohWeight;
+    float graviWeight;
+    
 private:
     ofVec2f gravitate();
     ofVec2f flock();
@@ -57,10 +62,7 @@ private:
     float maxForce;
     float scale;
     
-    float sepWeight;
-    float aliWeight;
-    float cohWeight;
-    float graviWeight;
+
     
     int index;
 };

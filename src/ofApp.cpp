@@ -22,9 +22,15 @@ XnSkeletonJointTransformation rightHand;
 
 vector<ofPoint> forceFieldsPoint;
 
-//BoidMachine boidMachineFast(5.0, 10.0, 1.0, 0.3);
-BoidMachine boidMachineFast(3.0, 10.0, 3.0, 1.0);
+// (float speed, float sep, float ali, float coh)
+//BoidMachine boidMachineFast(2.0, 10.0, 3.0, 1.0);
+BoidMachine boidMachineFast(2.0, 5.0, 0.5, 0.1);
 BoidMachine boidMachineSlow(1.0, 5.0, 0.5, 0.1);
+/*
+BoidMachine boidMachineSlow(5.0, 10.0, 1.0, 0.3);
+BoidMachine boidMachineFast(10.0, 10.0, 3.0, 1.0);
+ */
+
 //vector<demoParticle> p;
 float xFactor = 1024.0 / 640.0;
 float yFactor = 768.0 / 480.0;
@@ -64,7 +70,8 @@ void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& /*generator*/, XnUserID n
     printf("%d Lost user %d\n", epochTime, nId);
 
     // REMOVE FORCEFIELD
-    //boidMachine.removeForceField(nId - 1);
+    boidMachineFast.removeForceField(nId - 1);
+    boidMachineSlow.removeForceField(nId - 1);
 }
 // Callback: Detected a pose
 void XN_CALLBACK_TYPE UserPose_PoseDetected(xn::PoseDetectionCapability& /*capability*/, const XnChar* strPose, XnUserID nId, void* /*pCookie*/)
@@ -95,7 +102,8 @@ void XN_CALLBACK_TYPE UserCalibration_CalibrationComplete(xn::SkeletonCapability
         g_UserGenerator.GetSkeletonCap().StartTracking(nId);
         
         // ADD FORCEFIELD
-        //boidMachine.addForceField(nId);
+        boidMachineFast.addForceField(nId);
+        boidMachineSlow.addForceField(nId);
     }
     else
     {
@@ -143,7 +151,6 @@ void ofApp::setup(){
 	currentModeStr = "KINECT ACTION";
 
 	resetParticles();
-    
    
     /*
     ofSetLogLevel(OF_LOG_VERBOSE);
@@ -166,12 +173,15 @@ void ofApp::setup(){
     model.setScale(0.1, 0.1, 0.1);
     */
     //model.loadModel("astroBoy.dae", true);
-    model.loadModel("particle_11.dae", true);
-    //model.loadModel("particles1.dae", true);
+   // model.loadModel("particle_11.dae", true);
+    model.loadModel("particles.dae", true);
     boidMachineFast.setModel(&model);
     boidMachineSlow.setModel(&model);
+    
+    ofxAssimpMeshHelper &meshHelper = model.getMeshHelper(0);
+    ofMaterial & material = meshHelper.material;
 
-  //  setupKinect();
+    setupKinect();
 }
 
 
@@ -203,7 +213,8 @@ void ofApp::resetParticles(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    //updateKinect();
+    updateKinect();
+    
     boidMachineFast.update();
     boidMachineSlow.update();
     /*
@@ -241,7 +252,6 @@ void ofApp::draw(){
     ///////////////
     // KINECT
     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-    
 	ofEnableDepthTest();
     
     ///////////////
@@ -417,7 +427,8 @@ void ofApp::updateKinect() {
             g_DepthGenerator.ConvertRealWorldToProjective(1, &righthandPoint, &righthandPoint);
             
             // UPDATE FORCE FIELD
-            //boidMachine.setPosForceField(aUsers[i - 1], torsoPoint.X * xFactor, torsoPoint.Y * xFactor, leftHandPoint.X * xFactor, leftHandPoint.Y * xFactor, righthandPoint.X * xFactor, righthandPoint.Y * xFactor);
+            boidMachineFast.setPosForceField(aUsers[i - 1], torsoPoint.X * xFactor, torsoPoint.Y * xFactor, leftHandPoint.X * xFactor, leftHandPoint.Y * xFactor, righthandPoint.X * xFactor, righthandPoint.Y * xFactor);
+            boidMachineSlow.setPosForceField(aUsers[i - 1], torsoPoint.X * xFactor, torsoPoint.Y * xFactor, leftHandPoint.X * xFactor, leftHandPoint.Y * xFactor, righthandPoint.X * xFactor, righthandPoint.Y * xFactor);
         }
     }
 }

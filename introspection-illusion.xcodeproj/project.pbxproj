@@ -90,7 +90,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6F12D59318F96F68001E0A0A /* introspection-illusionDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "introspection-illusionDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F12D59318F96F68001E0A0A /* introspection-illusion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "introspection-illusion.app"; path = "/Users/Bernhard/git/of_v0.8.1_osx_release/apps/myApps/introspection-illusion/bin/introspection-illusion.app"; sourceTree = "<absolute>"; };
 		6F12D5DA18FACF14001E0A0A /* addon_config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = addon_config.mk; sourceTree = "<group>"; };
 		6F12D5DE18FACF14001E0A0A /* aiAnim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aiAnim.h; sourceTree = "<group>"; };
 		6F12D5DF18FACF14001E0A0A /* aiAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aiAssert.h; sourceTree = "<group>"; };
@@ -535,7 +535,6 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				6F12D59318F96F68001E0A0A /* introspection-illusionDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -586,7 +585,7 @@
 			);
 			name = "introspection-illusion";
 			productName = myOFApp;
-			productReference = 6F12D59318F96F68001E0A0A /* introspection-illusionDebug.app */;
+			productReference = 6F12D59318F96F68001E0A0A /* introspection-illusion.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

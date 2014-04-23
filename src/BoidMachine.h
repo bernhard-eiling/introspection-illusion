@@ -28,6 +28,7 @@ public:
     
     void update();
     void draw();
+    void varySep();
     void addForceField(int index);
     void removeForceField(int user);
     void setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
@@ -36,8 +37,14 @@ public:
     int numBoids;
     float speed;
     float sep;
+    float maxSep; // max seperation
+    float minSep; // min seperation
+    float sepTolerance; // margin of varying seperation force
+    float sepChange; // amount of change of varying seperation force
     float ali;
     float coh;
+    float randomizer;
+    bool explode = false;
     
     vector<Boid> boids;
     map<int, ForceField> forceFields;

@@ -12,7 +12,8 @@
 ForceField::ForceField() {
     standing = 0;
     standingAccuracy = 10.0;
-    fieldStrenght = 0.01;
+    //fieldStrenght = 0.1;
+    fieldStrenght = 0.3;
     fieldMulti = 0.00001;
     radius = 0.0;
     radiusSqrt = 0.0;
@@ -40,7 +41,7 @@ void ForceField::update() {
 }
 
 void ForceField::draw() {
-    
+    ofPushStyle();
     if (standing == 1) {
         ofSetColor(0, 255, 0);
     } else {
@@ -52,8 +53,9 @@ void ForceField::draw() {
     ofCircle(leftHandPos.x, leftHandPos.y, 5);
     ofCircle(rightHandPos.x, rightHandPos.y, 5);
      */
-    ofNoFill();
+   // ofNoFill();
     ofCircle(torsoPos.x, torsoPos.y, sqrt(radius));
+    ofPopStyle();
 }
 
 bool ForceField::isStanding() {

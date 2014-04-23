@@ -11,10 +11,14 @@
 
 BoidMachine::BoidMachine(float sp, float s, float a, float c) {
     
+    sepTolerance = .0;
     speed = sp;
     sep = s;
     ali = a;
     coh = c;
+    maxSep = 100.0;
+    minSep = s;
+    sepChange = 0.01;
 
     numBoids = 600;
     
@@ -31,6 +35,8 @@ BoidMachine::BoidMachine(float sp, float s, float a, float c) {
 }
 
 void BoidMachine::update() {
+    varySep();
+    
     for(int i = 0; i < boids.size(); i++) {
 		boids[i].update();
 	}
@@ -43,6 +49,7 @@ void BoidMachine::update() {
 void BoidMachine::draw() {
     glShadeModel(GL_SMOOTH); //some model / light stuff
     light.enable();
+    light.setPosition(-300, -300, -30000);
     ofEnableSeparateSpecularLight();
 
     for(int i = 0; i < boids.size(); i++) {
@@ -64,6 +71,48 @@ void BoidMachine::draw() {
 	}
 }
 
+void BoidMachine::varySep() {
+    // Vary the force of separation
+    randomizer = ofRandom(0.0, 1.0);
+    if (randomizer > 0.99) {
+        if (explode) {
+            /*
+            for(int i = 0; i < boids.size(); i++) {
+                boids[i].sepWeight = 100.0;
+                boids[i].cohWeight = coh;
+            }
+             */
+            explode = false;
+            printf("explode: %d\n", explode);
+        } else {
+            /*
+            for(int i = 0; i < boids.size(); i++) {
+                boids[i].sepWeight = sep;
+                boids[i].cohWeight = 4.0;
+            }
+             */
+            explode = true;
+            printf("explode: %d\n", explode);
+        }
+    }
+    if (explode) {
+        if (sep <= maxSep) {
+            for(int i = 0; i < boids.size(); i++) {
+                sep += sepChange;
+                boids[i].sepWeight = sep;
+            }
+        }
+    } else {
+        if (sep >= minSep) {
+            for(int i = 0; i < boids.size(); i++) {
+                sep -= sepChange;
+                boids[i].sepWeight = sep;
+            }
+
+        }
+    }
+}
+
 void BoidMachine::addForceField(int user) {
    // forceFields.insert(std::make_pair(user, ofVec2f()));
 
@@ -81,9 +130,7 @@ void BoidMachine::setModel(ofxAssimpModelLoader *m) {
     model = m;
     // MESH
     ofSetLogLevel(OF_LOG_VERBOSE);
-    
     ofDisableArbTex(); // we need GL_TEXTURE_2D for our models coords.
-    
     model->playAllAnimations();
     //model->setScale(0.05, 0.05, 0.05);
     

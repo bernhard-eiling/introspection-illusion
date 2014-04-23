@@ -24,9 +24,9 @@ Boid::Boid() {
     //cohWeight = 0.1;
     cohWeight = ofRandom(0.05, 1.0);
     graviWeight = -0.05;
-    scale = 1.5;//ofRandom(0.5, 1.0);
+    scale = ofRandom(0.5, 3.0);
     
-    pos.x = (float)(std::rand() % 1024);//500;//ofRandomWidth();
+    pos.x = (float)(std::rand() % 1280);//500;//ofRandomWidth();
 	pos.y = (float)(std::rand() % 768);//ofRandomHeight();
      
     /*
@@ -65,7 +65,10 @@ void Boid::draw() {
     ofPushMatrix();
     ofTranslate(pos.x, pos.y, 0);
     ofRotate(rotate, 0, 1, 1);
+    ofPushStyle();
+    ofSetColor(0, 0, 128);
     model->drawFaces();
+    ofPopStyle();
     ofPopMatrix();
 
     // PRINT NEIGHBOUR RADIUS
@@ -199,7 +202,7 @@ void Boid::setForceFields(map<int, ForceField> *fields) {
 void Boid::setModel(ofxAssimpModelLoader *m) {
     model = m;
     //model->setScale(0.05, 0.05, 0.05);
-    float scale = ofRandom(0.02, 0.07);
+    float scale = 0.04;//ofRandom(0.02, 0.07);
     model->setScale(scale, scale, scale);
 }
 
