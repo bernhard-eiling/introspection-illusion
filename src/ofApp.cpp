@@ -181,7 +181,7 @@ void ofApp::setup(){
     ofxAssimpMeshHelper &meshHelper = model.getMeshHelper(0);
     ofMaterial & material = meshHelper.material;
 
-    setupKinect();
+    //setupKinect();
 }
 
 
@@ -213,7 +213,7 @@ void ofApp::resetParticles(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    updateKinect();
+    //updateKinect();
     
     boidMachineFast.update();
     boidMachineSlow.update();
