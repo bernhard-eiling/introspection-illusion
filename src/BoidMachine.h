@@ -32,6 +32,7 @@ public:
     void addForceField(int index);
     void removeForceField(int user);
     void setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
+    void setPosForceField(int user, int xTorso, int yTorso);
     void setModel(ofxAssimpModelLoader *m);
     
     int numBoids;

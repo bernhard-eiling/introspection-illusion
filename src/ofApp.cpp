@@ -34,7 +34,7 @@ BoidMachine boidMachineFast(10.0, 10.0, 3.0, 1.0);
 //vector<demoParticle> p;
 float xFactor = 1024.0 / 640.0;
 float yFactor = 768.0 / 480.0;
-
+bool useKinect = true;
 
 //---------------------------------------------------------------------------
 // CALLBACKS
@@ -141,47 +141,26 @@ return nRetVal;						    \
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetVerticalSync(true);
-	/*
-	int num = 40000;
-	p.assign(num, demoParticle());
-    */
-    
+
 	currentMode = PARTICLE_MODE_KINECT;
-
 	currentModeStr = "KINECT ACTION";
-
 	resetParticles();
-   
-    /*
-    ofSetLogLevel(OF_LOG_VERBOSE);
-    
-    ofDisableArbTex(); // we need GL_TEXTURE_2D for our models coords.
-    
-    bAnimate = false;
-    bAnimateMouse = false;
-    animationPosition = 0;
-    
-    //model.loadModel("particle_11.dae", true);
-    model.loadModel("particles.dae", true);
-    //model.loadModel("particle_anim.dae", true);
-    model.setPosition(ofGetWidth() * 0.5, (float)ofGetHeight() * 0.75 , 0);
-    model.setLoopStateForAllAnimations(OF_LOOP_NORMAL);
-    model.playAllAnimations();
-    if(!bAnimate) {
-        model.setPausedForAllAnimations(true);
-    }
-    model.setScale(0.1, 0.1, 0.1);
-    */
-    //model.loadModel("astroBoy.dae", true);
-   // model.loadModel("particle_11.dae", true);
+
     model.loadModel("particles.dae", true);
     boidMachineFast.setModel(&model);
     boidMachineSlow.setModel(&model);
     
     ofxAssimpMeshHelper &meshHelper = model.getMeshHelper(0);
     ofMaterial & material = meshHelper.material;
+    
+    /////// testing
+    
+            boidMachineFast.addForceField(1);
+            boidMachineFast.setPosForceField(1, 400, 400);
+            //boidMachineSlow.setPosForceField(1, 400, 400);
+            //boidMachineSlow.setPosForceField(1, 400, 400);
 
-    //setupKinect();
+    if (useKinect) setupKinect();
 }
 
 
@@ -189,7 +168,6 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::resetParticles(){
 
-	//these are the attraction points used qin the forth demo
 	attractPoints.clear();
 	for(int i = 0; i < 4; i++){
 		attractPoints.push_back( ofPoint( ofMap(i, 0, 4, 100, ofGetWidth()-100) , ofRandom(100, ofGetHeight()-100) ) );
@@ -201,45 +179,21 @@ void ofApp::resetParticles(){
 	}
 	
 	attractPointsWithMovement = attractPoints;
-	/*
-	for(unsigned int i = 0; i < p.size(); i++){
-		p[i].setAttractPoints(&attractPointsWithMovement);
-        p[i].setForceFieldsPoint(&forceFieldsPoint);
-		p[i].reset();
-	}	
-     */
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    //updateKinect();
+    if (useKinect) updateKinect();
     
     boidMachineFast.update();
     boidMachineSlow.update();
-    /*
-	for(unsigned int i = 0; i < p.size(); i++){
-		p[i].update();
-	}
-     */
-    //boidMachine.setPosForceField(0, ofGetMouseX(), ofGetMouseY());
-    
-    ///////////////
-    // MESH
-    /*
-    model.update();
-    
-    if(bAnimateMouse) {
-        model.setPositionForAllAnimations(animationPosition);
-    }
-    */
-    //mesh = model.getCurrentAnimatedMesh(0);
     
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    //ofBackground(0,0,0, 10);
+
     ofBackground(0, 0);
 
 	ofSetColor(230);
@@ -253,182 +207,34 @@ void ofApp::draw(){
     // KINECT
     ofEnableBlendMode(OF_BLENDMODE_ALPHA);
 	ofEnableDepthTest();
-    
-    ///////////////
-    // MESH
-    /*
-    model.drawFaces();
-    light.enable();
-    */
-    /*
-    ofSetColor(255);
-    
-    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-    
-	ofEnableDepthTest();
-    
-    glShadeModel(GL_SMOOTH); //some model / light stuff
-    light.enable();
-    ofEnableSeparateSpecularLight();
-    
-    ofPushMatrix();
-    ofTranslate(model.getPosition().x+100, model.getPosition().y, 0);
-    ofRotate(-mouseX, 0, 1, 0);
-    ofTranslate(-model.getPosition().x, -model.getPosition().y, 0);
-    model.drawFaces();
-    ofPopMatrix();
-    
-    ofPushMatrix();
-    ofTranslate(model.getPosition().x+300, model.getPosition().y, 0);
-    ofRotate(-mouseX, 0, 1, 0);
-    ofTranslate(-model.getPosition().x, -model.getPosition().y, 0);
-    model.drawFaces();
-    ofPopMatrix();
-    
-    if(ofGetGLProgrammableRenderer()){
-		glPushAttrib(GL_ALL_ATTRIB_BITS);
-		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
-    }
-    glEnable(GL_NORMALIZE);
-    
-    ofPushMatrix();
-    ofTranslate(model.getPosition().x-300, model.getPosition().y, 0);
-    ofRotate(-mouseX, 0, 1, 0);
-    ofTranslate(-model.getPosition().x, -model.getPosition().y, 0);
-    
-    ofxAssimpMeshHelper & meshHelper = model.getMeshHelper(0);
-    
-    ofMultMatrix(model.getModelMatrix());
-    ofMultMatrix(meshHelper.matrix);
-    
-    ofMaterial & material = meshHelper.material;
-    if(meshHelper.hasTexture()){
-        meshHelper.getTexturePtr()->bind();
-    }
-    material.begin();
-    mesh.drawWireframe();
-    material.end();
-    if(meshHelper.hasTexture()){
-        meshHelper.getTexturePtr()->unbind();
-    }
-    ofPopMatrix();
-    
-    if(ofGetGLProgrammableRenderer()){
-    	glPopAttrib();
-    }
-    
-    ofDisableDepthTest();
-    light.disable();
-    ofDisableLighting();
-    ofDisableSeparateSpecularLight();
-     */
-    
 }
 
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-	if( key == '1'){
-		currentMode = PARTICLE_MODE_ATTRACT;
-		currentModeStr = "1 - PARTICLE_MODE_ATTRACT: attracts to mouse"; 		
-	}
-	if( key == '2'){
-		currentMode = PARTICLE_MODE_REPEL;
-		currentModeStr = "2 - PARTICLE_MODE_REPEL: repels from mouse"; 				
-	}
-	if( key == '3'){
-		currentMode = PARTICLE_MODE_NEAREST_POINTS;
-		currentModeStr = "3 - PARTICLE_MODE_NEAREST_POINTS: hold 'f' to disable force"; 						
-	}
-	if( key == '4'){
-		currentMode = PARTICLE_MODE_NOISE;
-		currentModeStr = "4 - PARTICLE_MODE_NOISE: snow particle simulation"; 						
-		resetParticles();
-	}
-    if( key == '5'){
-		currentMode = PARTICLE_MODE_KINECT;
-		currentModeStr = "KINECT ACTION";
-		resetParticles();
-	}
-		
-	if( key == ' ' ){
-		resetParticles();
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
-}
+///////////////////////////////////
+// KINECT
+//
 
 void ofApp::updateKinect() {
     
     g_Context.WaitOneUpdateAll(g_UserGenerator);
-    // print the torso information for the first user already tracking
     nUsers=MAX_NUM_USERS;
     g_UserGenerator.GetUsers(aUsers, nUsers);
-    for(XnUInt16 i=0; i<nUsers; i++) {
+    
+    for(XnUInt16 i = 1; i < nUsers; i++) {
         if(g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i])) {
             
             g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_TORSO,torsoJoint);
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_LEFT_HAND,leftHand);
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_RIGHT_HAND,rightHand);
-            
             XnSkeletonJointPosition torsoPos;
-            XnSkeletonJointPosition leftHandPos;
-            XnSkeletonJointPosition rightHandPos;
             g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_TORSO, torsoPos);
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_LEFT_HAND, leftHandPos);
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_RIGHT_HAND, rightHandPos);
             
             XnPoint3D torsoPoint;
-            XnPoint3D leftHandPoint;
-            XnPoint3D righthandPoint;
             torsoPoint = torsoPos.position;
-            leftHandPoint = leftHandPos.position;
-            righthandPoint = rightHandPos.position;
             
             g_DepthGenerator.ConvertRealWorldToProjective(1, &torsoPoint, &torsoPoint);
-            g_DepthGenerator.ConvertRealWorldToProjective(1, &leftHandPoint, &leftHandPoint);
-            g_DepthGenerator.ConvertRealWorldToProjective(1, &righthandPoint, &righthandPoint);
             
+            //////////////////////
             // UPDATE FORCE FIELD
-            boidMachineFast.setPosForceField(aUsers[i - 1], torsoPoint.X * xFactor, torsoPoint.Y * xFactor, leftHandPoint.X * xFactor, leftHandPoint.Y * xFactor, righthandPoint.X * xFactor, righthandPoint.Y * xFactor);
-            boidMachineSlow.setPosForceField(aUsers[i - 1], torsoPoint.X * xFactor, torsoPoint.Y * xFactor, leftHandPoint.X * xFactor, leftHandPoint.Y * xFactor, righthandPoint.X * xFactor, righthandPoint.Y * xFactor);
+            boidMachineFast.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * xFactor);
+            boidMachineSlow.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * xFactor);
         }
     }
 }

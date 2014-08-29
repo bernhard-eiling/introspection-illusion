@@ -97,7 +97,6 @@ ofVec2f Boid::gravitate() {
     }
     //grav *= graviWeight;
     
-    
     return grav;
 }
 

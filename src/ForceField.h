@@ -24,6 +24,7 @@ public:
     void update();
     void draw();
     void setPos(int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
+    void setPos(int xTorso, int yTorso);
     bool isStanding();
     
     ofVec2f torsoPos;

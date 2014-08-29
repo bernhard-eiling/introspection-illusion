@@ -9,6 +9,7 @@
 #include "BoidMachine.h"
 #include "ForceField.h"
 
+
 BoidMachine::BoidMachine(float sp, float s, float a, float c) {
     
     sepTolerance = .0;
@@ -40,14 +41,19 @@ void BoidMachine::update() {
     for(int i = 0; i < boids.size(); i++) {
 		boids[i].update();
 	}
+    /*
     for(int i = 0; i < forceFields.size(); i++) {
 		forceFields[i].update();
 	}
-    //printf("\nnumForceFields: %lu", forceFields.size());
+    
+    for (auto &field : forceFields) {
+        field.second.update();
+    }
+     */
 }
 
 void BoidMachine::draw() {
-    glShadeModel(GL_SMOOTH); //some model / light stuff
+    glShadeModel(GL_SMOOTH);
     light.enable();
     light.setPosition(-300, -300, -30000);
     ofEnableSeparateSpecularLight();
@@ -66,13 +72,20 @@ void BoidMachine::draw() {
         }
          */
 	}
-    for(int i = 0; i < forceFields.size(); i++) {
+  
+    for(int i = 1; i < forceFields.size(); i++) {
 		forceFields[i].draw();
 	}
+
+    /*
+    for (auto &field : forceFields) {
+        field.second.draw();
+    }
+     */
 }
 
 void BoidMachine::varySep() {
-    // Vary the force of separation
+
     randomizer = ofRandom(0.0, 1.0);
     if (randomizer > 0.99) {
         if (explode) {
@@ -83,7 +96,7 @@ void BoidMachine::varySep() {
             }
              */
             explode = false;
-            printf("explode: %d\n", explode);
+            //printf("explode: %d\n", explode);
         } else {
             /*
             for(int i = 0; i < boids.size(); i++) {
@@ -92,7 +105,7 @@ void BoidMachine::varySep() {
             }
              */
             explode = true;
-            printf("explode: %d\n", explode);
+            //printf("explode: %d\n", explode);
         }
     }
     if (explode) {
@@ -114,16 +127,22 @@ void BoidMachine::varySep() {
 }
 
 void BoidMachine::addForceField(int user) {
-   // forceFields.insert(std::make_pair(user, ofVec2f()));
-
+    forceFields.insert(make_pair(user, ForceField()) );
 }
 
 void BoidMachine::removeForceField(int user) {
+    //printf("eraseForceField\n");
+    //printf("# before: %lu\n", forceFields.size());
     forceFields.erase(user);
+    //printf("# after: %lu\n", forceFields.size());
 }
 
 void BoidMachine::setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand) {
-    forceFields[user].setPos(xTorso, yTorso, xLeftHand, yLeftHand, xRightHand, yRightHand);
+    forceFields.at(user).setPos(xTorso, yTorso, xLeftHand, yLeftHand, xRightHand, yRightHand);
+}
+
+void BoidMachine::setPosForceField(int user, int xTorso, int yTorso) {
+    forceFields.at(user).setPos(xTorso, yTorso);
 }
 
 void BoidMachine::setModel(ofxAssimpModelLoader *m) {

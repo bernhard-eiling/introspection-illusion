@@ -71,3 +71,7 @@ void ForceField::setPos(int xTorso, int yTorso, int xLeftHand, int yLeftHand, in
     leftHandPos = ofVec2f(xLeftHand, yLeftHand);
     rightHandPos = ofVec2f(xRightHand, yRightHand);
 }
+
+void ForceField::setPos(int xTorso, int yTorso) {
+    torsoPos = ofVec2f(xTorso, yTorso);
+}
