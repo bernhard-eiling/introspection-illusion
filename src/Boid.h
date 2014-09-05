@@ -28,18 +28,20 @@ public:
     void update();
     void draw();
     
-    void setForceFields(map<int, ForceField> *fields);
+    void setForceFields(map<int, ForceField> &fields);
+    void setForceFields(vector<ForceField> &fields);
     void setIndex(int i);
-    void setNeighbours(vector<Boid> *boids);
-    void setModel(ofxAssimpModelLoader *model);
+    void setNeighbours(vector<Boid> &boids);
+    void setModel(ofxAssimpModelLoader &model);
     void setWeights(float sp, float sep, float ali, float coh);
+    void setPos(ofVec2f pos);
     float getLenght(ofVec2f vec);
     
     ofVec2f pos;
     ofVec2f vel;
     float rotate;
     vector<Boid> *neighbours;
-    map<int, ForceField> *forceFields;
+    vector<ForceField> *forceFields;
     ofxAssimpModelLoader *model;
     
     float sepWeight;
@@ -61,8 +63,6 @@ private:
     float maxSpeed;
     float maxForce;
     float scale;
-    
 
-    
     int index;
 };

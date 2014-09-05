@@ -24,32 +24,38 @@ BoidMachine::BoidMachine(float sp, float s, float a, float c) {
     numBoids = 600;
     
     for (int i = 0; i < numBoids; i++) {
-        Boid boid; // = new Boid(float sep, float ali, float coh);
+        Boid boid;// = new Boid();
         boid.setWeights(speed, sep, ali, coh);
         boids.push_back(boid);
     }
+
     for (int i = 0; i < boids.size(); i++) {
         boids.at(i).setIndex(i);
-        boids.at(i).setNeighbours(&boids);
-        boids.at(i).setForceFields(&forceFields);
+        boids.at(i).setNeighbours(boids);
+        boids.at(i).setForceFields(forceFields);
     }
 }
 
 void BoidMachine::update() {
+    
     varySep();
     
-    for(int i = 0; i < boids.size(); i++) {
-		boids[i].update();
-	}
-    /*
-    for(int i = 0; i < forceFields.size(); i++) {
-		forceFields[i].update();
-	}
-    
-    for (auto &field : forceFields) {
-        field.second.update();
+    for (auto &boid : boids) {
+        boid.update();
     }
-     */
+    for (auto &field : forceFields) {
+        field.update();
+    }
+    
+    ///////////////////////////
+    // swarm interaction
+    for (auto &field : forceFields) {
+        //printf("isStanding: %d\n", field.isStanding());
+        if (field.isStanding() == 1) {
+            int randomIndex = ofRandom(0.0, boids.size());
+            boids.at(randomIndex).setPos(field.getPos());
+        }
+    }
 }
 
 void BoidMachine::draw() {
@@ -58,30 +64,22 @@ void BoidMachine::draw() {
     light.setPosition(-300, -300, -30000);
     ofEnableSeparateSpecularLight();
 
-    for(int i = 0; i < boids.size(); i++) {
-		boids[i].draw();
+    for (auto &boid : boids) {
+        //boid.draw();
+    }
         /*
         for(int k = 0; k < forceFields.size(); k++) {
             
             ofLine(boids[i].pos.x, boids[i].pos.y, forceFields[k].torsoPos.x,forceFields[k].torsoPos.y);
         }
-         */
-        /*
+
         for(int k = 0; k < boids.size(); k++) {
             ofLine(boids[i].pos.x, boids[i].pos.y, boids[k].pos.x, boids[k].pos.y);
         }
          */
-	}
-  
-    for(int i = 1; i < forceFields.size(); i++) {
-		forceFields[i].draw();
-	}
-
-    /*
     for (auto &field : forceFields) {
-        field.second.draw();
+        field.draw();
     }
-     */
 }
 
 void BoidMachine::varySep() {
@@ -110,16 +108,17 @@ void BoidMachine::varySep() {
     }
     if (explode) {
         if (sep <= maxSep) {
-            for(int i = 0; i < boids.size(); i++) {
+            for(int i = 0; i < boids.
+                size(); i++) {
                 sep += sepChange;
-                boids[i].sepWeight = sep;
+                boids.at(i).sepWeight = sep;
             }
         }
     } else {
         if (sep >= minSep) {
             for(int i = 0; i < boids.size(); i++) {
                 sep -= sepChange;
-                boids[i].sepWeight = sep;
+                boids.at(i).sepWeight = sep;
             }
 
         }
@@ -127,14 +126,16 @@ void BoidMachine::varySep() {
 }
 
 void BoidMachine::addForceField(int user) {
-    forceFields.insert(make_pair(user, ForceField()) );
+    ForceField field(user);
+    forceFields.push_back(field);
 }
 
 void BoidMachine::removeForceField(int user) {
-    //printf("eraseForceField\n");
-    //printf("# before: %lu\n", forceFields.size());
-    forceFields.erase(user);
-    //printf("# after: %lu\n", forceFields.size());
+    for (int i = 0; i < forceFields.size(); i++) {
+        if (forceFields.at(i).user == user) {
+            forceFields.erase(forceFields.begin() + user);
+        }
+    }
 }
 
 void BoidMachine::setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand) {
@@ -142,18 +143,21 @@ void BoidMachine::setPosForceField(int user, int xTorso, int yTorso, int xLeftHa
 }
 
 void BoidMachine::setPosForceField(int user, int xTorso, int yTorso) {
-    forceFields.at(user).setPos(xTorso, yTorso);
+    for (auto &field : forceFields) {
+        if (field.user == user) {
+            field.setPos(xTorso, yTorso);
+        }
+    }
 }
 
-void BoidMachine::setModel(ofxAssimpModelLoader *m) {
-    model = m;
+void BoidMachine::setModel(ofxAssimpModelLoader &m) {
     // MESH
     ofSetLogLevel(OF_LOG_VERBOSE);
     ofDisableArbTex(); // we need GL_TEXTURE_2D for our models coords.
-    model->playAllAnimations();
+    //model->playAllAnimations();
     //model->setScale(0.05, 0.05, 0.05);
     
     for (int i = 0; i < boids.size(); i++) {
-        boids.at(i).setModel(model);
+        boids.at(i).setModel(m);
     }
 }

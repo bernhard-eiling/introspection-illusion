@@ -9,10 +9,10 @@
 #include "ForceField.h"
 
 
-ForceField::ForceField() {
-    standing = 0;
-    standingAccuracy = 10.0;
-    //fieldStrenght = 0.1;
+ForceField::ForceField(int i) {
+    user = i;
+    standing = false;
+    standingAccuracy = 0.1;//10.0;
     fieldStrenght = 0.3;
     fieldMulti = 0.00001;
     radius = 0.0;
@@ -21,23 +21,7 @@ ForceField::ForceField() {
 
 void ForceField::update() {
     standing = isStanding();
-    
-    if (standing) {
-        //fieldStrenght += fieldMulti;
-        /*
-        radiusSqrt += 100;
-        radius = sqrt(radiusSqrt);
-         */
-        radius += 100;
-    } else {
-        //fieldStrenght = 0;
-        radius = 0.0;
-        radiusSqrt = 0.0;
-    }
-    
     lastTorsoPos = torsoPos;
-    
-    //printf("Standin: %d\n", standing);
 }
 
 void ForceField::draw() {
@@ -48,13 +32,13 @@ void ForceField::draw() {
         ofSetColor(255, 0, 0);
     }
 
-    //ofCircle(torsoPos.x, torsoPos.y, 10);
+    ofCircle(torsoPos.x, torsoPos.y, 50);
     /*
     ofCircle(leftHandPos.x, leftHandPos.y, 5);
     ofCircle(rightHandPos.x, rightHandPos.y, 5);
      */
-   // ofNoFill();
-    ofCircle(torsoPos.x, torsoPos.y, sqrt(radius));
+    //ofNoFill();
+    //ofCircle(torsoPos.x, torsoPos.y, sqrt(radius));
     ofPopStyle();
 }
 
@@ -74,4 +58,8 @@ void ForceField::setPos(int xTorso, int yTorso, int xLeftHand, int yLeftHand, in
 
 void ForceField::setPos(int xTorso, int yTorso) {
     torsoPos = ofVec2f(xTorso, yTorso);
+}
+
+ofVec2f ForceField::getPos() {
+    return torsoPos;
 }

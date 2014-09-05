@@ -6,7 +6,6 @@
 #include <XnPropNames.h>
 
 #include "ofMain.h"
-#include "Particle.h"
 #include "BoidMachine.h"
 
 #include "ofxAssimpModelLoader.h"
@@ -22,8 +21,7 @@ class ofApp : public ofBaseApp{
 		void resetParticles();
         void setupKinect();
         void updateKinect();
-		
-		particleMode currentMode;
+
 		string currentModeStr;
 
 		vector<ofPoint> attractPoints;
@@ -31,7 +29,6 @@ class ofApp : public ofBaseApp{
     
         /////////////////
         // MESH
-    
         ofxAssimpModelLoader model;
     
         ofMesh mesh;

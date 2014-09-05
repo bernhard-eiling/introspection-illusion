@@ -19,12 +19,13 @@ class ForceField {
     
 public:
     
-    ForceField();
+    ForceField(int user);
     
     void update();
     void draw();
     void setPos(int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
     void setPos(int xTorso, int yTorso);
+    ofVec2f getPos();
     bool isStanding();
     
     ofVec2f torsoPos;
@@ -38,5 +39,7 @@ public:
     float fieldMulti;
     float radius;
     float radiusSqrt;
+    
+    int user;
     
 };

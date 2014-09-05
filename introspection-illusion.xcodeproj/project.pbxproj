@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		29E44B66ACF1D336223C6D5F /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACEEE5DC9831FFBD95787112 /* Particle.cpp */; };
 		6F12D61018FACF14001E0A0A /* assimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F12D60518FACF14001E0A0A /* assimp.a */; };
 		6F12D61118FACF14001E0A0A /* ofxAssimpAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F12D60718FACF14001E0A0A /* ofxAssimpAnimation.cpp */; };
 		6F12D61218FACF14001E0A0A /* ofxAssimpMeshHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6F12D60918FACF14001E0A0A /* ofxAssimpMeshHelper.cpp */; };
@@ -218,9 +217,7 @@
 		6FF43D2618F85DBB0039A5C5 /* BoidMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoidMachine.h; sourceTree = "<group>"; };
 		6FF43D2818F86F9D0039A5C5 /* ForceField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ForceField.cpp; sourceTree = "<group>"; };
 		6FF43D2918F86F9D0039A5C5 /* ForceField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForceField.h; sourceTree = "<group>"; };
-		ACEEE5DC9831FFBD95787112 /* Particle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Particle.cpp; path = src/Particle.cpp; sourceTree = SOURCE_ROOT; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
-		D7B8F35BD0F7FE14E1597FA9 /* Particle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Particle.h; path = src/Particle.h; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
@@ -545,8 +542,6 @@
 				6F93BDD318F07C0E00A043DA /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				D7B8F35BD0F7FE14E1597FA9 /* Particle.h */,
-				ACEEE5DC9831FFBD95787112 /* Particle.cpp */,
 				6FF43D1818F73ECD0039A5C5 /* Boid.cpp */,
 				6FF43D1918F73ECD0039A5C5 /* Boid.h */,
 				6FF43D2518F85DBB0039A5C5 /* BoidMachine.cpp */,
@@ -660,7 +655,6 @@
 				6FF43D2A18F86F9D0039A5C5 /* ForceField.cpp in Sources */,
 				6F12D61418FACF14001E0A0A /* ofxAssimpTexture.cpp in Sources */,
 				6FF43D2718F85DBB0039A5C5 /* BoidMachine.cpp in Sources */,
-				29E44B66ACF1D336223C6D5F /* Particle.cpp in Sources */,
 				6F12D61118FACF14001E0A0A /* ofxAssimpAnimation.cpp in Sources */,
 				6FF43D1A18F73ECD0039A5C5 /* Boid.cpp in Sources */,
 				6F12D61218FACF14001E0A0A /* ofxAssimpMeshHelper.cpp in Sources */,

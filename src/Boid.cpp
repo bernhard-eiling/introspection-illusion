@@ -1,4 +1,4 @@
-//
+    //
 //  Boid.cpp
 //  introspection-illusion
 //
@@ -10,8 +10,8 @@
 
 Boid::Boid() {
     speed = 1.0;
-    neighbours = NULL;
-    forceFields = NULL;
+    //neighbours = NULL;
+    //forceFields = NULL;
     neighbourRadius = 3500; // radius 50
     seperationRadius = 250; // radius 10
     gravitationRadius = 12000;
@@ -40,13 +40,13 @@ Boid::Boid() {
 }
 
 void Boid::update() {
+    /*
     ofVec2f gravity = ofVec2f(0.0, 0.0);
-    if (forceFields != NULL) {
-        gravity = gravitate();
-    }
+    gravity = gravitate();
+    */
     ofVec2f acc = flock();
     vel = (vel + acc).limit(maxSpeed);
-    vel = (vel + gravity).limit(maxSpeed);
+    //vel = (vel + gravity).limit(maxSpeed);
     pos += vel;
     // SCALE UP BOID BY VELOCITY
     //scale = vel.length();
@@ -61,6 +61,7 @@ void Boid::draw() {
     ofSetColor(255, 255, 255);
     ofCircle(pos.x, pos.y, scale * 1.0);
     */
+    
     // MODEL
     ofPushMatrix();
     ofTranslate(pos.x, pos.y, 0);
@@ -70,7 +71,7 @@ void Boid::draw() {
     model->drawFaces();
     ofPopStyle();
     ofPopMatrix();
-
+    
     // PRINT NEIGHBOUR RADIUS
     /*
     if( index == 1) {
@@ -85,7 +86,6 @@ ofVec2f Boid::gravitate() {
     ofVec2f grav = ofVec2f(0.0, 0.0);
     
     for(int i = 0; i < forceFields->size(); i++){
-        if(forceFields->find(i) != forceFields->end()) {
             ofVec2f deltaVec = forceFields->at(i).torsoPos - pos;
             float deltaSqrt = deltaVec.lengthSquared();
             if (deltaSqrt < forceFields->at(i).radius) {
@@ -93,9 +93,7 @@ ofVec2f Boid::gravitate() {
         
             }
             grav *= forceFields->at(i).fieldStrenght;
-        }
     }
-    //grav *= graviWeight;
     
     return grav;
 }
@@ -111,7 +109,6 @@ ofVec2f Boid::flock() {
 
     for(int i = 0; i < neighbours->size(); i++){
         
-        // skip if currentBoid == this
         if (index != i) {
             Boid currentBoid = neighbours->at(i);
             ofVec2f delta = pos - currentBoid.pos;
@@ -190,16 +187,16 @@ float Boid::getLenght(ofVec2f vec) {
     return lenght;
 }
 
-void Boid::setNeighbours(vector<Boid> *boids) {
-    neighbours = boids;
+void Boid::setNeighbours(vector<Boid> &boids) {
+    neighbours = &boids;
 }
 
-void Boid::setForceFields(map<int, ForceField> *fields) {
-    forceFields = fields;
+void Boid::setForceFields(vector<ForceField> &fields) {
+    forceFields = &fields;
 }
 
-void Boid::setModel(ofxAssimpModelLoader *m) {
-    model = m;
+void Boid::setModel(ofxAssimpModelLoader &m) {
+    model = &m;
     //model->setScale(0.05, 0.05, 0.05);
     float scale = 0.04;//ofRandom(0.02, 0.07);
     model->setScale(scale, scale, scale);
@@ -218,4 +215,8 @@ void Boid::setWeights(float sp, float s, float a, float c) {
 
 void Boid::setIndex(int i) {
     index = i;
+}
+
+void Boid::setPos(ofVec2f p) {
+    pos = p;
 }

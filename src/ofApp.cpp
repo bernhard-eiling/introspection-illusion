@@ -20,12 +20,13 @@ XnSkeletonJointTransformation torsoJoint;
 XnSkeletonJointTransformation leftHand;
 XnSkeletonJointTransformation rightHand;
 
-vector<ofPoint> forceFieldsPoint;
+//vector<ofPoint> forceFieldsPoint;
 
 // (float speed, float sep, float ali, float coh)
 //BoidMachine boidMachineFast(2.0, 10.0, 3.0, 1.0);
-BoidMachine boidMachineFast(2.0, 5.0, 0.5, 0.1);
-BoidMachine boidMachineSlow(1.0, 5.0, 0.5, 0.1);
+//BoidMachine boidMachineFast(2.0, 5.0, 0.5, 0.1);
+//BoidMachine boidMachineSlow(1.0, 5.0, 0.5, 0.1);
+BoidMachine boidMachineFast(1.0, 5.0, 0.5, 0.1);
 /*
 BoidMachine boidMachineSlow(5.0, 10.0, 1.0, 0.3);
 BoidMachine boidMachineFast(10.0, 10.0, 3.0, 1.0);
@@ -70,8 +71,8 @@ void XN_CALLBACK_TYPE User_LostUser(xn::UserGenerator& /*generator*/, XnUserID n
     printf("%d Lost user %d\n", epochTime, nId);
 
     // REMOVE FORCEFIELD
-    boidMachineFast.removeForceField(nId - 1);
-    boidMachineSlow.removeForceField(nId - 1);
+    boidMachineFast.removeForceField(nId);
+    //boidMachineSlow.removeForceField(nId - 1);
 }
 // Callback: Detected a pose
 void XN_CALLBACK_TYPE UserPose_PoseDetected(xn::PoseDetectionCapability& /*capability*/, const XnChar* strPose, XnUserID nId, void* /*pCookie*/)
@@ -103,7 +104,7 @@ void XN_CALLBACK_TYPE UserCalibration_CalibrationComplete(xn::SkeletonCapability
         
         // ADD FORCEFIELD
         boidMachineFast.addForceField(nId);
-        boidMachineSlow.addForceField(nId);
+        //boidMachineSlow.addForceField(nId);
     }
     else
     {
@@ -141,29 +142,24 @@ return nRetVal;						    \
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetVerticalSync(true);
-
-	currentMode = PARTICLE_MODE_KINECT;
+    
 	currentModeStr = "KINECT ACTION";
 	resetParticles();
 
     model.loadModel("particles.dae", true);
-    boidMachineFast.setModel(&model);
-    boidMachineSlow.setModel(&model);
+    boidMachineFast.setModel(model);
+    //boidMachineSlow.setModel(&model);
     
-    ofxAssimpMeshHelper &meshHelper = model.getMeshHelper(0);
-    ofMaterial & material = meshHelper.material;
-    
-    /////// testing
-    
-            boidMachineFast.addForceField(1);
-            boidMachineFast.setPosForceField(1, 400, 400);
-            //boidMachineSlow.setPosForceField(1, 400, 400);
-            //boidMachineSlow.setPosForceField(1, 400, 400);
+    ofxAssimpMeshHelper meshHelper = model.getMeshHelper(0);
+    ofMaterial material = meshHelper.material;
 
     if (useKinect) setupKinect();
+    
+    ////////////////////////
+    // TESTING
+    //boidMachineFast.addForceField(2);
+    //boidMachineFast.setPosForceField(2, 400, 400);
 }
-
-
 
 //--------------------------------------------------------------
 void ofApp::resetParticles(){
@@ -172,12 +168,6 @@ void ofApp::resetParticles(){
 	for(int i = 0; i < 4; i++){
 		attractPoints.push_back( ofPoint( ofMap(i, 0, 4, 100, ofGetWidth()-100) , ofRandom(100, ofGetHeight()-100) ) );
 	}
-    
-    forceFieldsPoint.clear();
-	for(int i = 0; i <= MAX_NUM_USERS; i++){
-		forceFieldsPoint.push_back( ofPoint( -10000.0, -10000.0 ) );
-	}
-	
 	attractPointsWithMovement = attractPoints;
 }
 
@@ -185,9 +175,8 @@ void ofApp::resetParticles(){
 void ofApp::update(){
     
     if (useKinect) updateKinect();
-    
     boidMachineFast.update();
-    boidMachineSlow.update();
+    //boidMachineSlow.update();
     
 }
 
@@ -201,7 +190,7 @@ void ofApp::draw(){
     ofDrawBitmapString(fpsStr, 10,20);
 
     boidMachineFast.draw();
-    boidMachineSlow.draw();
+    //boidMachineSlow.draw();
     
     ///////////////
     // KINECT
@@ -212,14 +201,13 @@ void ofApp::draw(){
 ///////////////////////////////////
 // KINECT
 //
-
 void ofApp::updateKinect() {
     
     g_Context.WaitOneUpdateAll(g_UserGenerator);
     nUsers=MAX_NUM_USERS;
     g_UserGenerator.GetUsers(aUsers, nUsers);
     
-    for(XnUInt16 i = 1; i < nUsers; i++) {
+    for(XnUInt16 i = 0; i < nUsers; i++) {
         if(g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i])) {
             
             g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_TORSO,torsoJoint);
@@ -234,7 +222,7 @@ void ofApp::updateKinect() {
             //////////////////////
             // UPDATE FORCE FIELD
             boidMachineFast.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * xFactor);
-            boidMachineSlow.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * xFactor);
+            //boidMachineSlow.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * xFactor);
         }
     }
 }
