@@ -33,9 +33,11 @@ public:
     void removeForceField(int user);
     void setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
     void setPosForceField(int user, int xTorso, int yTorso);
+    void setModelArray(vector<ofxAssimpModelLoader> &m);
     void setModel(ofxAssimpModelLoader &m);
     
     int numBoids;
+    float boidEmitThreshold;
     float speed;
     float sep;
     float maxSep; // max seperation

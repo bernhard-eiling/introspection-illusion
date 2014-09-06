@@ -20,6 +20,7 @@ BoidMachine::BoidMachine(float sp, float s, float a, float c) {
     maxSep = 100.0;
     minSep = s;
     sepChange = 0.01;
+    boidEmitThreshold = 0.2; // smaller -> less Boids
 
     numBoids = 600;
     
@@ -49,11 +50,13 @@ void BoidMachine::update() {
     
     ///////////////////////////
     // swarm interaction
-    for (auto &field : forceFields) {
-        //printf("isStanding: %d\n", field.isStanding());
-        if (field.isStanding() == 1) {
-            int randomIndex = ofRandom(0.0, boids.size());
-            boids.at(randomIndex).setPos(field.getPos());
+    float randBoid = ofRandom(0.0, 1.0);
+    if (boidEmitThreshold > randBoid) {
+        for (auto &field : forceFields) {
+            if (field.standing) {
+                int randomIndex = ofRandom(0.0, boids.size());
+                boids.at(randomIndex).setPos(field.getPos());
+            }
         }
     }
 }
@@ -65,7 +68,7 @@ void BoidMachine::draw() {
     ofEnableSeparateSpecularLight();
 
     for (auto &boid : boids) {
-        //boid.draw();
+        boid.draw();
     }
         /*
         for(int k = 0; k < forceFields.size(); k++) {
@@ -147,6 +150,19 @@ void BoidMachine::setPosForceField(int user, int xTorso, int yTorso) {
         if (field.user == user) {
             field.setPos(xTorso, yTorso);
         }
+    }
+}
+
+void BoidMachine::setModelArray(vector<ofxAssimpModelLoader> &m) {
+    // MESH
+    ofSetLogLevel(OF_LOG_VERBOSE);
+    ofDisableArbTex(); // we need GL_TEXTURE_2D for our models coords.
+    //model->playAllAnimations();
+    //model->setScale(0.05, 0.05, 0.05);
+    
+    for (int i = 0; i < boids.size(); i++) {
+        int modelIndex = ofRandom(0, m.size());
+        boids.at(i).setModel(m.at(modelIndex));
     }
 }
 

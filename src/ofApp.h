@@ -29,10 +29,17 @@ class ofApp : public ofBaseApp{
     
         /////////////////
         // MESH
-        ofxAssimpModelLoader model;
-    
-        ofMesh mesh;
+        ofxAssimpModelLoader model1;
+        ofxAssimpModelLoader model2;
+        ofxAssimpModelLoader model3;
+        ofxAssimpModelLoader model4;
+        ofxAssimpModelLoader model5;
+        ofxAssimpModelLoader model6;
+        ofxAssimpModelLoader bigMama;
+
+
         ofLight	light;
+        vector<ofxAssimpModelLoader> modelArray;
     
         bool bAnimate;
         bool bAnimateMouse;

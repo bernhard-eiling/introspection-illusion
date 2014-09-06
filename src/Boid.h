@@ -40,6 +40,8 @@ public:
     ofVec2f pos;
     ofVec2f vel;
     float rotate;
+    float rotateChange;
+    float scale;
     vector<Boid> *neighbours;
     vector<ForceField> *forceFields;
     ofxAssimpModelLoader *model;
@@ -62,7 +64,5 @@ private:
     float gravitationRadius;
     float maxSpeed;
     float maxForce;
-    float scale;
-
     int index;
 };

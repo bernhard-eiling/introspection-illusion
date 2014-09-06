@@ -24,7 +24,8 @@ Boid::Boid() {
     //cohWeight = 0.1;
     cohWeight = ofRandom(0.05, 1.0);
     graviWeight = -0.05;
-    scale = ofRandom(0.5, 3.0);
+    scale = ofRandom(0.02, 0.07);
+    rotateChange = ofRandom(-2.0, 2.0);
     
     pos.x = (float)(std::rand() % 1280);//500;//ofRandomWidth();
 	pos.y = (float)(std::rand() % 768);//ofRandomHeight();
@@ -48,12 +49,10 @@ void Boid::update() {
     vel = (vel + acc).limit(maxSpeed);
     //vel = (vel + gravity).limit(maxSpeed);
     pos += vel;
-    // SCALE UP BOID BY VELOCITY
-    //scale = vel.length();
     
     stayOnScreen();
     //bounceScreen();
-    rotate += 2.0;
+    rotate += rotateChange;
 }
 
 void Boid::draw() {
@@ -197,8 +196,6 @@ void Boid::setForceFields(vector<ForceField> &fields) {
 
 void Boid::setModel(ofxAssimpModelLoader &m) {
     model = &m;
-    //model->setScale(0.05, 0.05, 0.05);
-    float scale = 0.04;//ofRandom(0.02, 0.07);
     model->setScale(scale, scale, scale);
 }
 

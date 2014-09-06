@@ -35,7 +35,7 @@ BoidMachine boidMachineFast(10.0, 10.0, 3.0, 1.0);
 //vector<demoParticle> p;
 float xFactor = 1024.0 / 640.0;
 float yFactor = 768.0 / 480.0;
-bool useKinect = true;
+bool useKinect = false;
 
 //---------------------------------------------------------------------------
 // CALLBACKS
@@ -146,19 +146,29 @@ void ofApp::setup(){
 	currentModeStr = "KINECT ACTION";
 	resetParticles();
 
-    model.loadModel("particles.dae", true);
-    boidMachineFast.setModel(model);
-    //boidMachineSlow.setModel(&model);
+    model1.loadModel("particle1.dae", true);
+    model2.loadModel("particle2.dae", true);
+    model3.loadModel("particle3.dae", true);
+    model4.loadModel("particle4.dae", true);
+    model5.loadModel("particle5.dae", true);
+    model6.loadModel("particle6.dae", true);
+    //bigMama.loadModel("bigMama.dae", true);
+    modelArray.push_back(model1);
+    modelArray.push_back(model2);
+    modelArray.push_back(model3);
+    modelArray.push_back(model4);
+    modelArray.push_back(model5);
+    modelArray.push_back(model6);
     
-    ofxAssimpMeshHelper meshHelper = model.getMeshHelper(0);
-    ofMaterial material = meshHelper.material;
+    //boidMachineFast.setModel(bigMama);
+    boidMachineFast.setModelArray(modelArray);
 
     if (useKinect) setupKinect();
     
     ////////////////////////
     // TESTING
-    //boidMachineFast.addForceField(2);
-    //boidMachineFast.setPosForceField(2, 400, 400);
+    boidMachineFast.addForceField(2);
+    boidMachineFast.setPosForceField(2, 400, 400);
 }
 
 //--------------------------------------------------------------
