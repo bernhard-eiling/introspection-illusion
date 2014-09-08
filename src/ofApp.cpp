@@ -25,8 +25,10 @@ XnSkeletonJointTransformation rightHand;
 // (float speed, float sep, float ali, float coh)
 //BoidMachine boidMachineFast(2.0, 10.0, 3.0, 1.0);
 //BoidMachine boidMachineFast(2.0, 5.0, 0.5, 0.1);
-//BoidMachine boidMachineSlow(1.0, 5.0, 0.5, 0.1);
+
+
 BoidMachine boidMachineFast(1.0, 5.0, 0.5, 0.1);
+//BoidMachine boidMachineFast(1.0, 10.0, 0.6, 0.1);
 /*
 BoidMachine boidMachineSlow(5.0, 10.0, 1.0, 0.3);
 BoidMachine boidMachineFast(10.0, 10.0, 3.0, 1.0);
@@ -35,7 +37,7 @@ BoidMachine boidMachineFast(10.0, 10.0, 3.0, 1.0);
 //vector<demoParticle> p;
 float xFactor = 1024.0 / 640.0;
 float yFactor = 768.0 / 480.0;
-bool useKinect = false;
+bool useKinect = true;
 
 //---------------------------------------------------------------------------
 // CALLBACKS
@@ -149,16 +151,16 @@ void ofApp::setup(){
     model1.loadModel("particle1.dae", true);
     model2.loadModel("particle2.dae", true);
     model3.loadModel("particle3.dae", true);
-    model4.loadModel("particle4.dae", true);
+    //model4.loadModel("particle4.dae", true);
     model5.loadModel("particle5.dae", true);
-    model6.loadModel("particle6.dae", true);
+    //model6.loadModel("particle6.dae", true);
     //bigMama.loadModel("bigMama.dae", true);
     modelArray.push_back(model1);
     modelArray.push_back(model2);
     modelArray.push_back(model3);
-    modelArray.push_back(model4);
+    //modelArray.push_back(model4);
     modelArray.push_back(model5);
-    modelArray.push_back(model6);
+    //modelArray.push_back(model6);
     
     //boidMachineFast.setModel(bigMama);
     boidMachineFast.setModelArray(modelArray);
@@ -167,8 +169,10 @@ void ofApp::setup(){
     
     ////////////////////////
     // TESTING
+    /*
     boidMachineFast.addForceField(2);
     boidMachineFast.setPosForceField(2, 400, 400);
+     */
 }
 
 //--------------------------------------------------------------
@@ -194,11 +198,11 @@ void ofApp::update(){
 void ofApp::draw(){
 
     ofBackground(0, 0);
-
+/*
 	ofSetColor(230);
     string fpsStr = "FPS: " + ofToString(ofGetFrameRate(), 3);
     ofDrawBitmapString(fpsStr, 10,20);
-
+*/
     boidMachineFast.draw();
     //boidMachineSlow.draw();
     
@@ -220,19 +224,34 @@ void ofApp::updateKinect() {
     for(XnUInt16 i = 0; i < nUsers; i++) {
         if(g_UserGenerator.GetSkeletonCap().IsTracking(aUsers[i])) {
             
-            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_TORSO,torsoJoint);
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_TORSO, torsoJoint);
             XnSkeletonJointPosition torsoPos;
             g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_TORSO, torsoPos);
-            
             XnPoint3D torsoPoint;
             torsoPoint = torsoPos.position;
+            
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_LEFT_HAND, leftHand);
+            XnSkeletonJointPosition leftHandPos;
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_LEFT_HAND, leftHandPos);
+            XnPoint3D leftHandPoint;
+            leftHandPoint = leftHandPos.position;
+
+            
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJoint(aUsers[i],XN_SKEL_RIGHT_HAND, rightHand);
+            XnSkeletonJointPosition rightHandPos;
+            g_UserGenerator.GetSkeletonCap().GetSkeletonJointPosition(aUsers[i], XN_SKEL_RIGHT_HAND, rightHandPos);
+            XnPoint3D rightHandPoint;
+            rightHandPoint = rightHandPos.position;
             
             g_DepthGenerator.ConvertRealWorldToProjective(1, &torsoPoint, &torsoPoint);
             
             //////////////////////
             // UPDATE FORCE FIELD
-            boidMachineFast.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * xFactor);
-            //boidMachineSlow.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * xFactor);
+            boidMachineFast.setPosForceField(aUsers[i], torsoPoint.X * xFactor, torsoPoint.Y * yFactor);
+            boidMachineFast.setPosForceField(aUsers[i],
+                                             torsoPoint.X * xFactor, torsoPoint.Y * yFactor,
+                                             leftHandPoint.X * xFactor, leftHandPoint.Y * yFactor,
+                                             rightHandPoint.X * xFactor, rightHandPoint.Y * yFactor);
         }
     }
 }

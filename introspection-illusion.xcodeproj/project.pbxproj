@@ -136,7 +136,6 @@
 		6F12D60D18FACF14001E0A0A /* ofxAssimpTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxAssimpTexture.cpp; sourceTree = "<group>"; };
 		6F12D60E18FACF14001E0A0A /* ofxAssimpTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAssimpTexture.h; sourceTree = "<group>"; };
 		6F12D60F18FACF14001E0A0A /* ofxAssimpUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxAssimpUtils.h; sourceTree = "<group>"; };
-		6F3EB80E19198DF800C6A0AD /* introspection-illusionDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "introspection-illusionDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F93BD2A18EB5D5000A043DA /* libnimCodecs.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnimCodecs.dylib; path = "../../../../../kinect/OpenNI-Bin-Dev-MacOSX-v1.5.7.10/Lib/libnimCodecs.dylib"; sourceTree = "<group>"; };
 		6F93BD2B18EB5D5000A043DA /* libnimMockNodes.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnimMockNodes.dylib; path = "../../../../../kinect/OpenNI-Bin-Dev-MacOSX-v1.5.7.10/Lib/libnimMockNodes.dylib"; sourceTree = "<group>"; };
 		6F93BD2C18EB5D5000A043DA /* libnimRecorder.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnimRecorder.dylib; path = "../../../../../kinect/OpenNI-Bin-Dev-MacOSX-v1.5.7.10/Lib/libnimRecorder.dylib"; sourceTree = "<group>"; };
@@ -211,6 +210,7 @@
 		6F93BD7F18EB5EF000A043DA /* XnUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XnUtils.h; path = "../../../../../kinect/OpenNI-Bin-Dev-MacOSX-v1.5.7.10/Include/XnUtils.h"; sourceTree = "<group>"; };
 		6F93BD8018EB5EF000A043DA /* XnVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XnVersion.h; path = "../../../../../kinect/OpenNI-Bin-Dev-MacOSX-v1.5.7.10/Include/XnVersion.h"; sourceTree = "<group>"; };
 		6F93BDD318F07C0E00A043DA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		6FAB947B19BB9D1000A5C285 /* introspection-illusionDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "introspection-illusionDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FF43D1818F73ECD0039A5C5 /* Boid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Boid.cpp; sourceTree = "<group>"; };
 		6FF43D1918F73ECD0039A5C5 /* Boid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Boid.h; sourceTree = "<group>"; };
 		6FF43D2518F85DBB0039A5C5 /* BoidMachine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoidMachine.cpp; sourceTree = "<group>"; };
@@ -532,7 +532,7 @@
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
-				6F3EB80E19198DF800C6A0AD /* introspection-illusionDebug.app */,
+				6FAB947B19BB9D1000A5C285 /* introspection-illusionDebug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -581,7 +581,7 @@
 			);
 			name = "introspection-illusion";
 			productName = myOFApp;
-			productReference = 6F3EB80E19198DF800C6A0AD /* introspection-illusionDebug.app */;
+			productReference = 6FAB947B19BB9D1000A5C285 /* introspection-illusionDebug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

@@ -23,9 +23,11 @@ public:
     
     void update();
     void draw();
-    void setPos(int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
-    void setPos(int xTorso, int yTorso);
-    ofVec2f getPos();
+    void setPos(float xTorso, float yTorso, float xLeftHand, float yLeftHand, float xRightHand, float yRightHand);
+    void setPos(float xTorso, float yTorso);
+    ofVec2f getTorsoPos();
+    ofVec2f getLeftHandPos();
+    ofVec2f getRightHandPos();
     bool isStanding();
     
     ofVec2f torsoPos;
@@ -42,4 +44,6 @@ public:
     
     int user;
     
+    bool freeze;
+    int freezeCounter;
 };

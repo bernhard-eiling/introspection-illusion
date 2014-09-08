@@ -31,10 +31,11 @@ public:
     void varySep();
     void addForceField(int user);
     void removeForceField(int user);
-    void setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand);
+    void setPosForceField(int user, float xTorso, float yTorso, float xLeftHand, float yLeftHand, float xRightHand, float yRightHand);
     void setPosForceField(int user, int xTorso, int yTorso);
     void setModelArray(vector<ofxAssimpModelLoader> &m);
     void setModel(ofxAssimpModelLoader &m);
+    void deleteLostForceFields();
     
     int numBoids;
     float boidEmitThreshold;
@@ -47,6 +48,7 @@ public:
     float ali;
     float coh;
     float randomizer;
+    int explodeCounter;
     bool explode = false;
     
     vector<Boid> boids;

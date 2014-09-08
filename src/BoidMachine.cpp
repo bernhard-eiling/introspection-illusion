@@ -21,8 +21,9 @@ BoidMachine::BoidMachine(float sp, float s, float a, float c) {
     minSep = s;
     sepChange = 0.01;
     boidEmitThreshold = 0.2; // smaller -> less Boids
+    explodeCounter = 0;
 
-    numBoids = 600;
+    numBoids = 700;
     
     for (int i = 0; i < numBoids; i++) {
         Boid boid;// = new Boid();
@@ -54,11 +55,16 @@ void BoidMachine::update() {
     if (boidEmitThreshold > randBoid) {
         for (auto &field : forceFields) {
             if (field.standing) {
-                int randomIndex = ofRandom(0.0, boids.size());
-                boids.at(randomIndex).setPos(field.getPos());
+                int randomIndex1 = ofRandom(0.0, boids.size());
+                int randomIndex2 = ofRandom(0.0, boids.size());
+
+                //boids.at(randomIndex).setPos(field.getPos());
+                boids.at(randomIndex1).setPos(field.getLeftHandPos());
+                boids.at(randomIndex2).setPos(field.getRightHandPos());
             }
         }
     }
+    deleteLostForceFields();
 }
 
 void BoidMachine::draw() {
@@ -86,30 +92,15 @@ void BoidMachine::draw() {
 }
 
 void BoidMachine::varySep() {
-
+    
     randomizer = ofRandom(0.0, 1.0);
-    if (randomizer > 0.99) {
-        if (explode) {
-            /*
-            for(int i = 0; i < boids.size(); i++) {
-                boids[i].sepWeight = 100.0;
-                boids[i].cohWeight = coh;
-            }
-             */
-            explode = false;
-            //printf("explode: %d\n", explode);
-        } else {
-            /*
-            for(int i = 0; i < boids.size(); i++) {
-                boids[i].sepWeight = sep;
-                boids[i].cohWeight = 4.0;
-            }
-             */
-            explode = true;
-            //printf("explode: %d\n", explode);
-        }
+    if (randomizer > 0.996 && explode == false) {
+        //printf("start explosion\n");
+        explode = true;
     }
+    
     if (explode) {
+        explodeCounter++;
         if (sep <= maxSep) {
             for(int i = 0; i < boids.
                 size(); i++) {
@@ -126,6 +117,12 @@ void BoidMachine::varySep() {
 
         }
     }
+    // after 40 frames end explode
+    if (explodeCounter > 30) {
+        //printf("end explosion\n");
+        explodeCounter = 0;
+        explode = false;
+    }
 }
 
 void BoidMachine::addForceField(int user) {
@@ -141,9 +138,12 @@ void BoidMachine::removeForceField(int user) {
     }
 }
 
-void BoidMachine::setPosForceField(int user, int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand) {
-    forceFields.at(user).setPos(xTorso, yTorso, xLeftHand, yLeftHand, xRightHand, yRightHand);
-}
+void BoidMachine::setPosForceField(int user, float xTorso, float yTorso, float xLeftHand, float yLeftHand, float xRightHand, float yRightHand) {
+    for (auto &field : forceFields) {
+        if (field.user == user) {
+            field.setPos(xTorso, yTorso, xLeftHand, yLeftHand, xRightHand, xRightHand);
+        }
+    }}
 
 void BoidMachine::setPosForceField(int user, int xTorso, int yTorso) {
     for (auto &field : forceFields) {
@@ -175,5 +175,13 @@ void BoidMachine::setModel(ofxAssimpModelLoader &m) {
     
     for (int i = 0; i < boids.size(); i++) {
         boids.at(i).setModel(m);
+    }
+}
+
+void BoidMachine::deleteLostForceFields() {
+    for (int i = 0; i < forceFields.size(); i++) {
+        if (forceFields.at(i).freeze) {
+            forceFields.at(i).setPos(-9999.0, -9999.0);
+        }
     }
 }

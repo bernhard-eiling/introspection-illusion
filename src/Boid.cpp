@@ -197,6 +197,7 @@ void Boid::setForceFields(vector<ForceField> &fields) {
 void Boid::setModel(ofxAssimpModelLoader &m) {
     model = &m;
     model->setScale(scale, scale, scale);
+    //model->setPosition(0.0, 0.0, ofRandom(-200.0, 200.0));
 }
 
 void Boid::setWeights(float sp, float s, float a, float c) {

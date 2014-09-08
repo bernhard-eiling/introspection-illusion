@@ -12,14 +12,24 @@
 ForceField::ForceField(int i) {
     user = i;
     standing = false;
-    standingAccuracy = 0.1;//10.0;
+    standingAccuracy = 3.0;
     fieldStrenght = 0.3;
     fieldMulti = 0.00001;
     radius = 0.0;
     radiusSqrt = 0.0;
+    freezeCounter = 0;
 }
 
 void ForceField::update() {
+    if (lastTorsoPos == torsoPos) {
+        freezeCounter++; // if ForceField didnt move imcrement freezeCounter
+        if (freezeCounter > 60) {
+            freeze = true;
+        }
+    } else {
+        freezeCounter = 0;
+        freeze = false;
+    }
     standing = isStanding();
     lastTorsoPos = torsoPos;
 }
@@ -50,16 +60,22 @@ bool ForceField::isStanding() {
     }
 }
 
-void ForceField::setPos(int xTorso, int yTorso, int xLeftHand, int yLeftHand, int xRightHand, int yRightHand) {
+void ForceField::setPos(float xTorso, float yTorso, float xLeftHand, float yLeftHand, float xRightHand, float yRightHand) {
     torsoPos = ofVec2f(xTorso, yTorso);
     leftHandPos = ofVec2f(xLeftHand, yLeftHand);
     rightHandPos = ofVec2f(xRightHand, yRightHand);
 }
 
-void ForceField::setPos(int xTorso, int yTorso) {
+void ForceField::setPos(float xTorso, float yTorso) {
     torsoPos = ofVec2f(xTorso, yTorso);
 }
 
-ofVec2f ForceField::getPos() {
+ofVec2f ForceField::getTorsoPos() {
     return torsoPos;
+}
+ofVec2f ForceField::getLeftHandPos() {
+    return leftHandPos;
+}
+ofVec2f ForceField::getRightHandPos() {
+    return rightHandPos;
 }
